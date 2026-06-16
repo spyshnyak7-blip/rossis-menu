@@ -547,7 +547,7 @@
     let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
     // ----- ОТПРАВКА ЧЕРЕЗ HTML-ФОРМУ (без fetch) -----
-    const form = document.createElement('form');
+    const formUrl = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru';
     form.method = 'POST';
     form.action = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru'; // ваш email
     form.enctype = 'application/json'; // важно для JSON
