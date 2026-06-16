@@ -547,7 +547,7 @@
     const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
     // ----- ОТПРАВКА НА GOOGLE APPS SCRIPT -----
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzZ8R7V18ZKiUCRNIDrwaZnLGHtTBz4jrKt0tYGc28mz9rWWBV0hupBtdbotfMeDTog/exec'; // ЗАМЕНИТЕ
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8JvuYERMg-QzauWsJsFZanKwoJaZCQNUlgBpfrStFmdCOveIDbP1Z9mP2XRW8G4Zo/exec'; // ЗАМЕНИТЕ
 
     fetch(scriptUrl, {
         method: 'POST',
