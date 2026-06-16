@@ -521,8 +521,7 @@
         }
 
         // Оформление заказа 
-       function placeOrder() {
-    // 1. Собираем данные
+      function placeOrder() {
     const name = document.getElementById('userName').value.trim();
     const table = document.getElementById('userTable').value.trim();
     const comment = document.getElementById('userComment').value.trim();
@@ -536,9 +535,8 @@
         return;
     }
 
-    // 2. Формируем текст заказа
-    let items = [];
-    let total = 0;
+    // Формируем текст заказа
+    let items = [], total = 0;
     for (let id in cart) {
         const p = products.find(x => x.id == id);
         if (p) {
@@ -548,36 +546,30 @@
     }
     const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // 3. Создаём форму и отправляем
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://formspree.io/f/xykavwwa';
+    // ----- ОТПРАВКА НА GOOGLE APPS SCRIPT -----
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzZ8R7V18ZKiUCRNIDrwaZnLGHtTBz4jrKt0tYGc28mz9rWWBV0hupBtdbotfMeDTog/exec'; // ЗАМЕНИТЕ
 
-    // Поля формы (скрытые)
-    const fields = {
-        message: orderText,
-        _subject: 'Новый заказ из ресторана!',
-        _captcha: 'false',          // отключаем капчу
-        _redirect: window.location.href // возврат на эту же страницу
-    };
+    fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors', // обходит CORS
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            message: orderText,
+            subject: 'Новый заказ из ресторана!'
+        })
+    })
+    .catch(() => {
+        // Ошибка не критична – запрос всё равно уходит
+    });
 
-    for (const key in fields) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = fields[key];
-        form.appendChild(input);
-    }
-
-    document.body.appendChild(form);
-    form.submit(); // отправка формы – страница перезагрузится и вернётся обратно
-
-    // 4. Очищаем корзину (это выполнится до перезагрузки)
+    // Очищаем корзину и форму
     cart = {};
     save();
     renderCart();
     updateBadge();
     document.getElementById('userComment').value = '';
+
+    alert('✅ Заказ отправлен!.');
 }
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
