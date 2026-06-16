@@ -521,7 +521,7 @@
         }
 
         // Оформление заказа 
-        function placeOrder() {
+       function placeOrder() {
     let name = document.getElementById('userName').value.trim();
     let table = document.getElementById('userTable').value.trim();
     let comment = document.getElementById('userComment').value.trim();
@@ -546,37 +546,34 @@
     }
     let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // ----- ОТПРАВКА ЧЕРЕЗ HTML-ФОРМУ (без fetch) -----
-    const formUrl = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru';
+    // ----- ОТПРАВКА ЧЕРЕЗ ФОРМУ С ПЕРЕНАПРАВЛЕНИЕМ (способ 2) -----
+    const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru'; // ваш email
-    form.enctype = 'application/json'; // важно для JSON
+    form.action = 'https://formsubmit.co/pyshnyak.2000@mail.ru'; // ЗАМЕНИТЕ НА СВОЙ EMAIL
 
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'message';
-    input.value = orderText;
-    form.appendChild(input);
+    const fields = {
+        message: orderText,
+        _subject: 'Новый заказ из ресторана!',
+        _redirect: window.location.href // возврат на ту же страницу
+    };
 
-    // Добавляем тему письма
-    const subject = document.createElement('input');
-    subject.type = 'hidden';
-    subject.name = '_subject';
-    subject.value = 'Новый заказ из ресторана!';
-    form.appendChild(subject);
+    for (let key in fields) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+    }
 
     document.body.appendChild(form);
-    form.submit(); // отправка формы
+    form.submit(); // страница перезагрузится, но редирект вернёт обратно
 
-    // После отправки очищаем корзину
+    // Очищаем корзину (это выполнится после отправки, но до перезагрузки)
     cart = {};
     save();
     renderCart();
     updateBadge();
     document.getElementById('userComment').value = '';
-    
-    // Подсказка пользователю (форма отправляется, но мы не ждём ответа)
-    alert('✅ Заказ отправлен!');
 }
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
