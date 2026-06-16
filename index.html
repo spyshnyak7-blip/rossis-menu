@@ -546,36 +546,38 @@
     }
     let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // ----- ОТПРАВКА НА EMAIL через FormSubmit -----
-    const formUrl = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru'; // замените на свой
+    // ----- ОТПРАВКА ЧЕРЕЗ HTML-ФОРМУ (без fetch) -----
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://formsubmit.co/ajax/ВАШ_EMAIL'; // ваш email
+    form.enctype = 'application/json'; // важно для JSON
 
-    fetch(formUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: orderText,
-            _subject: 'Новый заказ из ресторана!' // тема письма
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('✅ Заказ отправлен на почту!');
-        } else {
-            alert('❌ Ошибка отправки. Попробуйте ещё раз.');
-        }
-    })
-    .catch(error => {
-        alert('❌ Ошибка сети: ' + error.message);
-        console.error(error);
-    });
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'message';
+    input.value = orderText;
+    form.appendChild(input);
 
+    // Добавляем тему письма
+    const subject = document.createElement('input');
+    subject.type = 'hidden';
+    subject.name = '_subject';
+    subject.value = 'Новый заказ из ресторана!';
+    form.appendChild(subject);
+
+    document.body.appendChild(form);
+    form.submit(); // отправка формы
+
+    // После отправки очищаем корзину
     cart = {};
     save();
     renderCart();
     updateBadge();
     document.getElementById('userComment').value = '';
+    
+    // Подсказка пользователю (форма отправляется, но мы не ждём ответа)
+    alert('✅ Заказ отправлен! Ожидайте подтверждения.');
 }
-
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
         const overlay = document.getElementById('cartOverlay');
