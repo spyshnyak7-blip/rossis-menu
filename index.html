@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Меню ресторана — категории работают</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; }
+        .container { display: flex; gap: 30px; flex-wrap: wrap; }
+        .menu { flex: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 15px; align-items: start; }
+        .card { background: white; border-radius: 16px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h3 { margin: 0 0 5px; }
+        .price { color: #c25b2e; font-weight: bold; font-size: 20px; margin: 10px 0; }
+        button { background: #c25b2e; color: white; border: none; padding: 8px 12px; border-radius: 30px; cursor: pointer; font-weight: bold; }
+        .cart { flex: 1; background: white; border-radius: 20px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .total { font-size: 20px; font-weight: bold; margin: 15px 0; text-align: right; }
+        input, textarea { width: 100%; margin: 8px 0; padding: 8px; border-radius: 20px; border: 1px solid #ddd; }
+        .order-btn { width: 100%; background: #2f6b47; margin-top: 10px; }
+        .clear { background: #aaa; margin-bottom: 15px; }
+        .empty { text-align: center; color: #888; padding: 20px; }
+        h2 { color: black; } /* явный цвет */
+/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+
+/* Для планшетов и небольших экранов (до 992px) */
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column; /* меню сверху, корзина снизу */
+    }
+    .cart {
+        position: static; /* убираем липкость */
+        max-height: none;
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+/* Для телефонов (до 600px) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        margin: 0;
+    }
+    .container {
+        gap: 15px;
+    }
+    .menu {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
+    }
+    .card {
+        padding: 10px;
+    }
+    .card h3 {
+        font-size: 1.1rem;
+    }
+    .price {
+        font-size: 1.1rem;
+    }
+    .card button {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+        width: 100%;
+    }
+    .cart {
+        padding: 12px;
+    }
+    .cart h2 {
+        font-size: 1.4rem;
+    }
+    .cart-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .cart-item > div {
+        flex: 1 1 100%;
+    }
+    .cart-item-controls {
+        justify-content: flex-start;
+    }
+    .total {
+        font-size: 1.2rem;
+    }
+    input, textarea {
+        font-size: 1rem;
+        padding: 12px;
+    }
+    .order-btn, .clear {
+        padding: 14px;
+        font-size: 1rem;
+    }
+    /* Заголовки категорий */
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    h3 {
+        font-size: 1.1rem !important;
+    }
+    /* Шапка с логотипом */
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    header img {
+        height: 60px;
+    }
+    header h1 {
+        font-size: 1.6rem !important;
+    }
+    header p {
+        font-size: 0.8rem !important;
+    }
+}
+/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+
+/* Для планшетов и небольших экранов (до 992px) */
+@media (max-width: 992px) {
+    .container {
+        flex-direction: column; /* меню сверху, корзина снизу */
+    }
+    .cart {
+        position: static; /* убираем липкость */
+        max-height: none;
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+/* Для телефонов (до 600px) */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        margin: 0;
+    }
+    .container {
+        gap: 15px;
+    }
+    .menu {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
+    }
+    .card {
+        padding: 10px;
+    }
+    .card h3 {
+        font-size: 1.1rem;
+    }
+    .price {
+        font-size: 1.1rem;
+    }
+    .card button {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+        width: 100%;
+    }
+    .cart {
+        padding: 12px;
+    }
+    .cart h2 {
+        font-size: 1.4rem;
+    }
+    .cart-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .cart-item > div {
+        flex: 1 1 100%;
+    }
+    .cart-item-controls {
+        justify-content: flex-start;
+    }
+    .total {
+        font-size: 1.2rem;
+    }
+    input, textarea {
+        font-size: 1rem;
+        padding: 12px;
+    }
+    .order-btn, .clear {
+        padding: 14px;
+        font-size: 1rem;
+    }
+    /* Заголовки категорий */
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    h3 {
+        font-size: 1.1rem !important;
+    }
+    /* Шапка с логотипом */
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    header img {
+        height: 60px;
+    }
+    header h1 {
+        font-size: 1.6rem !important;
+    }
+    header p {
+        font-size: 0.8rem !important;
+    }
+}
+/* ===== ВЫЕЗЖАЮЩАЯ КОРЗИНА (мобильная) ===== */
+@media (max-width: 768px) {
+    /* Плавающая кнопка-корзина */
+    .cart-toggle-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: #c25b2e;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s;
+    }
+    .cart-toggle-btn:hover {
+        background: #a34721;
+    }
+    .cart-toggle-btn .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        min-width: 24px;
+        text-align: center;
+    }
+
+    /* Сама корзина — выезжает снизу */
+    .cart {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 70vh;
+        background: white;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        padding: 20px 15px;
+        overflow-y: auto;
+        width: 100% !important;
+        flex: none !important;
+    }
+    .cart.open {
+        transform: translateY(0);
+    }
+
+    /* Затемнение фона при открытой корзине */
+    .cart-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 998;
+    }
+    .cart-overlay.active {
+        display: block;
+    }
+
+    /* Скрываем статическую корзину в десктопной вёрстке */
+    .cart-desktop {
+        display: none;
+    }
+}
+
+/* Для десктопа (шире 768px) корзина остаётся справа */
+@media (min-width: 769px) {
+    .cart-toggle-btn, .cart-overlay {
+        display: none !important;
+    }
+    .cart {
+        position: sticky;
+        top: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+        flex: 1;
+        transform: none;
+        border-radius: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+}
+    </style>
+</head>
+<body>
+<!-- Затемнение фона при открытой корзине -->
+<div class="cart-overlay" id="cartOverlay"></div>
+
+<!-- Плавающая кнопка для открытия корзины (только мобильные) -->
+<button class="cart-toggle-btn" id="cartToggleBtn">
+    🛒 <span class="badge" id="cartBadge">0</span>
+</button>
+<header style="text-align: center; padding: 20px 0; margin-bottom: 30px;">
+    <h1 style="margin: 0; font-size: 2.5rem; color: #c25b2e;">ROSSI'S CLUB</h1>
+    <p style="margin: 0; color: #7f6b5c; font-size: 1rem;">Заказывайте прямо со стола</p>
+</header>
+<div class="container">
+    <div class="menu" id="menu"></div>
+    <div class="cart">
+        <h2>Корзина</h2>
+        <button class="clear" id="clearCart">Очистить</button>
+        <div id="cartItems"></div>
+        <div class="total">Итого: <span id="total">0</span> ₽</div>
+        <input type="text" id="name" placeholder="Ваше имя">
+        <input type="text" id="table" placeholder="Номер стола *">
+        <textarea id="comment" rows="2" placeholder="Комментарий"></textarea>
+        <button class="order-btn" id="orderBtn">Оформить заказ</button>
+    </div>
+</div>
+
+<script>
+    const products = [
+        { id: 1, name: "Цезарь с курицей", price: 450, category: "Кухня", subcategory: "Салаты" },
+        { id: 2, name: "Цезарь с креветками", price: 490, category: "Кухня", subcategory: "Салаты" },
+        { id: 3, name: "Салат с теплыми баклажанами и творожным сыром", price: 470, category: "Кухня", subcategory: "Салаты" },
+        { id: 4, name: "Греческий салат", price: 400, category: "Кухня", subcategory: "Салаты" },
+        { id: 5, name: "Гренки с сыром и чесноком", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
+        { id: 6, name: "Картофель фри", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
+        { id: 7, name: "Картофель айдахо", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
+        { id: 8, name: "Сырные палочки", price: 360, category: "Кухня", subcategory: "Горячие закуски" },
+        { id: 9, name: "Куриные наггетсы", price: 390, category: "Кухня", subcategory: "Горячие закуски" },
+        { id: 10, name: "Карбонара", price: 460, category: "Кухня", subcategory: "Паста" },
+        { id: 11, name: "Болоньезе", price: 510, category: "Кухня", subcategory: "Паста" },
+        { id: 12, name: "С курицей и грибами", price: 490, category: "Кухня", subcategory: "Паста" },
+        { id: 13, name: "Бургер с курицей", price: 570, category: "Кухня", subcategory: "Бургеры" },
+        { id: 14, name: "Чизкейк с лесными ягодами", price: 390, category: "Кухня", subcategory: "Десерты" },
+        { id: 15, name: "Наполеон", price: 360, category: "Кухня", subcategory: "Десерты" },
+        { id: 16, name: "Торт фисташка с малиной", price: 450, category: "Кухня", subcategory: "Десерты" },
+        { id: 17, name: "Корона Экстра", price: 350, category: "Бар", subcategory: "Бутылочное пиво" },
+        { id: 18, name: "Царская оригинальная", price: 250, category: "Бар", subcategory: "Водка" },
+        { id: 19, name: "Водка А кукурузная", price: 250, category: "Бар", subcategory: "Водка" },
+        { id: 20, name: "Коскенкорва", price: 350, category: "Бар", subcategory: "Водка" },
+        { id: 21, name: "Ред лейбл", price: 400, category: "Бар", subcategory: "Виски" },
+        { id: 22, name: "Манки Шоулдер", price: 950, category: "Бар", subcategory: "Виски" },
+        { id: 23, name: "Наки Томпсон 3 года", price: 300, category: "Бар", subcategory: "Виски" },
+        { id: 24, name: "Чивас 12 лет", price: 850, category: "Бар", subcategory: "Виски" },
+        { id: 25, name: "Джемесон", price: 550, category: "Бар", subcategory: "Виски" },
+        { id: 26, name: "Джим Бим", price: 400, category: "Бар", subcategory: "Виски" },
+        { id: 27, name: "Джек Дениалс", price: 550, category: "Бар", subcategory: "Виски" },
+        { id: 28, name: "Бомбей Сапфир", price: 800, category: "Бар", subcategory: "Джин" },
+        { id: 29, name: "Офир", price: 750, category: "Бар", subcategory: "Джин" },
+        { id: 30, name: "Ноз Расинес Совиньон Блан", price: 550, category: "Бар", subcategory: "Белое вино 0,125" },
+        { id: 31, name: "Чезари Пино Гриджио", price: 650, category: "Бар", subcategory: "Белое вино 0,125" },
+        { id: 32, name: "Осадия", price: 440, category: "Бар", subcategory: "Белое вино 0,125" },
+        { id: 33, name: "Кантиани Мерло", price: 400, category: "Бар", subcategory: "Красное вино 0,125" },
+        { id: 34, name: "Ноз Расинес Мерло", price: 650, category: "Бар", subcategory: "Красное вино 0,125" },
+        { id: 35, name: "Richetta Sauer", price: 550, category: "Бар", subcategory: "Коктейли 140мл" },
+        { id: 36, name: "Negroni", price: 660, category: "Бар", subcategory: "Коктейли 140мл" },
+        { id: 37, name: "Almond Negroni", price: 780, category: "Бар", subcategory: "Коктейли 140мл" },
+        { id: 38, name: "Double Daiquiri", price: 550, category: "Бар", subcategory: "Коктейли 140мл" },
+        { id: 39, name: "Cucumber Negroni", price: 750, category: "Бар", subcategory: "Коктейли 140мл" },
+        { id: 40, name: "Whiskey Sour", price: 550, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 41, name: "Mai tai Special", price: 750, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 42, name: "English Pie", price: 570, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 43, name: "Elizabeth Spritz", price: 680, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 44, name: "Gratini Tonic", price: 590, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 45, name: "Peach Spice", price: 670, category: "Бар", subcategory: "Коктейли лонг дринг" },
+        { id: 46, name: "Tropic set", price: 550, category: "Бар", subcategory: "Шот дринки" },
+        { id: 47, name: "Margo strawberry", price: 580, category: "Бар", subcategory: "Шот дринки" },
+        { id: 48, name: "Burbin Sour", price: 650, category: "Бар", subcategory: "Шот дринки" },
+        { id: 49, name: "Tai Set", price: 700, category: "Бар", subcategory: "Шот дринки" },
+        { id: 50, name: "Виски-кола", price: 400, category: "Бар", subcategory: "Простые миксы" },
+        { id: 51, name: "Текила Батанга", price: 400, category: "Бар", subcategory: "Простые миксы" },
+        { id: 52, name: "Куба Либре", price: 400, category: "Бар", subcategory: "Простые миксы" },
+        { id: 53, name: "Джин Тоник", price: 400, category: "Бар", subcategory: "Простые миксы" },
+        { id: 54, name: "Кампари Оранж", price: 450, category: "Бар", subcategory: "Простые миксы" },
+        { id: 55, name: "Лонг Айленд", price: 700, category: "Бар", subcategory: "Простые миксы" },
+        { id: 56, name: "Апероль Спритц", price: 650, category: "Бар", subcategory: "Простые миксы" },
+        { id: 57, name: "Сарти Спритц", price: 600, category: "Бар", subcategory: "Простые миксы" },
+        { id: 58, name: "Деласи Спритц", price: 550, category: "Бар", subcategory: "Простые миксы" },
+        { id: 59, name: "Кола 0,25", price: 250, category: "Бар", subcategory: "Лимонады" },
+        { id: 60, name: "Ананас-личи", price: 260, category: "Бар", subcategory: "Лапочка" },
+        { id: 61, name: "Сок 0,2 апельсин", price: 200, category: "Бар", subcategory: "Сок" },
+        { id: 62, name: "Сок 0,2 ананас", price: 200, category: "Бар", subcategory: "Сок" },
+        { id: 63, name: "Сок 0,2 вишня", price: 200, category: "Бар", subcategory: "Сок" },
+        { id: 64, name: "Сок 0,2 грейпфрут", price: 200, category: "Бар", subcategory: "Сок" },
+        { id: 65, name: "Сок 0,2 яблоко", price: 200, category: "Бар", subcategory: "Сок" },
+        { id: 66, name: "Вода 0,5 б/г", price: 160, category: "Бар", subcategory: "Вода" },
+        { id: 67, name: "Вода 0,5 с\г", price: 160, category: "Бар", subcategory: "Вода" },
+        { id: 68, name: "Алоэ-базилик", price: 280, category: "Бар", subcategory: "Б\А коктейли" },
+        { id: 69, name: "Сенча-юдзу", price: 280, category: "Бар", subcategory: "Б\А коктейли" },
+        { id: 70, name: "Манго-маракуйя", price: 280, category: "Бар", subcategory: "Б\А коктейли" },
+        { id: 71, name: "Груша-карамель", price: 280, category: "Бар", subcategory: "Б\А коктейли" },
+        { id: 72, name: "Ассам", price: 300, category: "Бар", subcategory: "Чай" },
+        { id: 73, name: "Сенча", price: 300, category: "Бар", subcategory: "Чай" },
+        { id: 74, name: "Эрл Грей", price: 300, category: "Бар", subcategory: "Чай" },
+        { id: 75, name: "Эспрессо", price: 150, category: "Бар", subcategory: "Кофе" },
+        { id: 76, name: "Американо", price: 200, category: "Бар", subcategory: "Кофе" },
+        { id: 77, name: "Капучино", price: 300, category: "Бар", subcategory: "Кофе" },
+        { id: 78, name: "Флэт Уайт", price: 320, category: "Бар", subcategory: "Кофе" },
+        { id: 79, name: "Латте", price: 320, category: "Бар", subcategory: "Кофе" },
+        { id: 80, name: "Раф", price: 350, category: "Бар", subcategory: "Кофе" },
+        { id: 81, name: "Молоко 50мл", price: 50, category: "Бар", subcategory: "Кофе" },
+        { id: 82, name: "Сироп", price: 50, category: "Бар", subcategory: "Кофе" },
+        { id: 83, name: "Лимон", price: 50, category: "Бар", subcategory: "Чай" },
+        
+    ];
+
+    let cart = {};
+
+    function save() { localStorage.setItem('cart', JSON.stringify(cart)); }
+    function load() { let saved = localStorage.getItem('cart'); if (saved) cart = JSON.parse(saved); else cart = {}; renderCart(); }
+
+    function addToCart(id) { cart[id] = (cart[id] || 0) + 1; save(); renderCart(); }
+    function removeFromCart(id) { if (cart[id]) { cart[id]--; if (cart[id] <= 0) delete cart[id]; save(); renderCart(); } }
+    function clearCart() { cart = {}; save(); renderCart(); }
+
+    function renderCart() {
+        let container = document.getElementById('cartItems');
+        let totalSpan = document.getElementById('total');
+        let total = 0;
+        if (Object.keys(cart).length === 0) { container.innerHTML = '<div class="empty">Корзина пуста</div>'; totalSpan.innerText = '0'; return; }
+        let html = '';
+        for (let id in cart) {let product = products.find(p => p.id == id);
+            if (!product) continue;
+            let qty = cart[id];
+            let sum = product.price * qty;
+            total += sum;
+            html += `<div class="cart-item"><div><b>${product.name}</b> ${product.price}₽ x ${qty}</div><div><button onclick="removeFromCart(${id})">-</button> <span>${qty}</span> <button onclick="addToCart(${id})">+</button></div><div>${sum}₽</div></div>`;
+        }
+        container.innerHTML = html;
+        totalSpan.innerText = total;
+    }
+
+    function renderMenu() {
+    const menuDiv = document.getElementById('menu');
+    menuDiv.innerHTML = '';
+
+    // Группировка
+    const categories = {};
+    products.forEach(p => {
+        if (!categories[p.category]) categories[p.category] = {};
+        if (!categories[p.category][p.subcategory]) categories[p.category][p.subcategory] = [];
+        categories[p.category][p.subcategory].push(p);
+    });
+
+    // Порядок категорий (можно менять)
+    const categoryOrder = ['Кухня', 'Бар', 'Десерты'];
+
+    categoryOrder.forEach(catName => {
+        if (!categories[catName]) return;
+
+        // Заголовок категории
+        const catHeader = document.createElement('h2');
+        catHeader.textContent = catName === 'Кухня' ? '🍽️ Кухня' : catName === 'Бар' ? '🍸 Бар' : catName;
+        catHeader.style.margin = '30px 0 10px 0';
+        catHeader.style.gridColumn = '1 / -1';
+        catHeader.style.fontSize = '1.8rem';
+        catHeader.style.borderBottom = '2px solid #c25b2e';
+        catHeader.style.paddingBottom = '5px';
+        catHeader.style.color = '#c25b2e';
+        menuDiv.appendChild(catHeader);
+
+        // Подкатегории
+        const subcats = categories[catName];
+        for (let subName in subcats) {
+            // Создаём контейнер для подкатегории (заголовок + карточки)
+            const subWrapper = document.createElement('div');
+            subWrapper.style.gridColumn = '1 / -1';
+            subWrapper.style.width = '100%';
+
+            // Заголовок подкатегории (кликабельный)
+            const subHeader = document.createElement('h3');
+            subHeader.textContent = subName;
+            subHeader.style.margin = '15px 0 5px 0';
+            subHeader.style.color = '#c25b2e';
+            subHeader.style.fontSize = '1.3rem';
+            subHeader.style.cursor = 'pointer';
+            subHeader.style.userSelect = 'none';
+            subHeader.style.display = 'flex';
+            subHeader.style.alignItems = 'center';
+            subHeader.style.justifyContent = 'space-between';
+
+            // Индикатор (стрелка) — только для мобильных, но добавим всегда
+            const arrow = document.createElement('span');
+            arrow.textContent = '▼';
+            arrow.style.fontSize = '1rem';
+            arrow.style.transition = 'transform 0.3s';
+            subHeader.appendChild(arrow);
+
+            // Контейнер для карточек блюд
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'subcategory-items';
+            itemsContainer.style.display = 'grid';
+            itemsContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            itemsContainer.style.gap = '15px';
+            itemsContainer.style.marginTop = '10px';
+
+            // Добавляем карточки в контейнер
+            subcats[subName].forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<h3>${p.name}</h3><div class="price">${p.price} ₽</div><button onclick="addToCartAndNotify(${p.id})">В корзину</button>`;
+                itemsContainer.appendChild(card);
+            });
+
+            // Обработчик клика по заголовку подкатегории
+            subHeader.addEventListener('click', function() {
+                // Переключаем видимость контейнера с карточками
+                const isHidden = itemsContainer.style.display === 'none';
+                itemsContainer.style.display = isHidden ? 'grid' : 'none';
+                // Меняем стрелку
+                arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
+            });
+
+            // На мобильных устройствах по умолчанию сворачиваем (скрываем карточки)
+            // Проверяем ширину экрана при загрузке
+            if (window.innerWidth <= 768) {
+                itemsContainer.style.display = 'none';
+                arrow.style.transform = 'rotate(-90deg)';
+}
+
+            // Собираем всё вместе
+            subWrapper.appendChild(subHeader);
+            subWrapper.appendChild(itemsContainer);
+            menuDiv.appendChild(subWrapper);
+        }
+    });
+}
+
+function placeOrder() {
+    let name = document.getElementById('name').value.trim();
+    let table = document.getElementById('table').value.trim();
+    let comment = document.getElementById('comment').value.trim();
+
+    if (!name) { alert("Пожалуйста, укажите ваше имя"); return; }
+    if (!table) { alert("Укажите номер стола"); return; }
+    if (Object.keys(cart).length === 0) { alert("Корзина пуста"); return; }
+
+    // Формируем текст заказа
+    let items = [];
+    let total = 0;
+    for (let id in cart) {
+        let p = products.find(x => x.id == id);
+        if (p) {
+            items.push(`${p.name} x${cart[id]} = ${p.price * cart[id]}₽`);
+            total += p.price * cart[id];
+        }
+    }
+    let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || "—"}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
+
+    // ----- ОТПРАВКА В TELEGRAM -----
+    const botToken = '8902156411:AAEeA_KNMtXwphDGHS_Yj8RP7skOFGh53VA';   // ЗАМЕНИТЕ НА РЕАЛЬНЫЙ ТОКЕН
+    const chatId = '8902156411';        // ЗАМЕНИТЕ НА РЕАЛЬНЫЙ CHAT ID
+
+    // Проверяем, заполнены ли данные
+    if (botToken && chatId && botToken !== '8902156411:AAEeA_KNMtXwphDGHS_Yj8RP7skOFGh53VA' && chatId !== '8902156411') {
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: orderText,
+                parse_mode: 'HTML'
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('✅ Заказ отправлен! Официант получил уведомление.');
+            } else {
+                // Показываем ошибку от Telegram
+                return response.text().then(text => {
+                    alert('❌ Ошибка при отправке: ' + text);
+                });
+            }
+        })
+        .catch(error => {
+            alert('❌ Ошибка сети. Проверьте подключение к интернету.');
+            console.error('Ошибка отправки:', error);
+        });
+    } else {
+        // Если данные не заполнены – показываем окно (как раньше)
+        alert(orderText);
+    }
+
+    // Очищаем корзину после заказа
+    cart = {};
+    save();
+    renderCart();
+    document.getElementById('comment').value = '';
+}
+
+    window.onload = () => { renderMenu(); load(); document.getElementById('clearCart').onclick = clearCart; document.getElementById('orderBtn').onclick = placeOrder; };
+// ===== УПРАВЛЕНИЕ КОРЗИНОЙ (мобильная шторка) =====
+const cartToggleBtn = document.getElementById('cartToggleBtn');
+const cartOverlay = document.getElementById('cartOverlay');
+const cartElement = document.querySelector('.cart');
+const cartBadge = document.getElementById('cartBadge');
+
+function updateCartBadge() {
+    const totalItems = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
+    cartBadge.textContent = totalItems;
+    cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+}
+
+// Открыть / закрыть корзину
+function toggleCart() {
+    cartElement.classList.toggle('open');
+    cartOverlay.classList.toggle('active');
+    document.body.style.overflow = cartElement.classList.contains('open') ? 'hidden' : '';
+}
+
+cartToggleBtn.addEventListener('click', toggleCart);
+cartOverlay.addEventListener('click', toggleCart);
+
+// Обновляем бейдж при изменении корзины (вызываем в addToCart/removeFromCart/clearCart)
+// Переопределим функции, чтобы обновлять бейдж
+const originalAdd = addToCart;
+addToCart = function(id) {
+    originalAdd(id);
+    updateCartBadge();
+};
+const originalRemove = removeFromCart;
+removeFromCart = function(id) {
+    originalRemove(id);
+    updateCartBadge();
+};
+const originalClear = clearCart;
+clearCart = function() {
+    originalClear();
+    updateCartBadge();
+};
+
+// Также вызываем при загрузке
+window.addEventListener('load', function() {
+    updateCartBadge();
+    // На десктопе корзина всегда видна, на мобильных скрыта
+    if (window.innerWidth > 768) {
+        cartElement.classList.add('open');
+        cartOverlay.classList.remove('active');
+    }
+});
+
+// При изменении размера окна (переход с мобилы на десктоп)
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+        cartElement.classList.add('open');
+        cartOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    } else {
+        // Если корзина была открыта, оставляем, но если закрыта – не мешаем
+        // Можно принудительно закрыть, чтобы не было конфликтов
+        // но лучше оставить как есть
+    }
+});
+// ===== ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ =====
+function showToast(message) {
+    const oldToast = document.querySelector('.toast-notification');
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        background: #2e7d32;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 500;
+        z-index: 9999;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
+        max-width: 90%;
+        text-align: center;
+        white-space: nowrap;
+    `;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
+
+// Добавление с уведомлением
+function addToCartAndNotify(id) {
+    addToCart(id);
+    const product = products.find(p => p.id === id);
+    if (product) {
+        showToast('✅ ' + product.name + ' добавлено в корзину');
+    } else {
+        showToast('✅ Добавлено в корзину');
+    }
+}
+</script>
+</body>
+</html>
