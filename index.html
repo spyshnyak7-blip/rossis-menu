@@ -549,7 +549,7 @@
     // ----- ОТПРАВКА ЧЕРЕЗ HTML-ФОРМУ (без fetch) -----
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'https://formsubmit.co/ajax/ВАШ_EMAIL'; // ваш email
+    form.action = 'https://formsubmit.co/ajax/pyshnyak.2000@mail.ru'; // ваш email
     form.enctype = 'application/json'; // важно для JSON
 
     const input = document.createElement('input');
@@ -576,7 +576,7 @@
     document.getElementById('userComment').value = '';
     
     // Подсказка пользователю (форма отправляется, но мы не ждём ответа)
-    alert('✅ Заказ отправлен! Ожидайте подтверждения.');
+    alert('✅ Заказ отправлен!');
 }
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
