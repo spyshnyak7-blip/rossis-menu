@@ -535,6 +535,7 @@
         return;
     }
 
+    // Формируем текст заказа
     let items = [];
     let total = 0;
     for (let id in cart) {
@@ -546,15 +547,24 @@
     }
     let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // ----- ОТПРАВКА ЧЕРЕЗ ФОРМУ С ПЕРЕНАПРАВЛЕНИЕМ (способ 2) -----
+    // ----- ОТПРАВКА ЧЕРЕЗ IFRAME (без перезагрузки) -----
+    // Создаём невидимый iframe
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hiddenFrame';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    // Создаём форму с target на iframe
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = 'https://formsubmit.co/pyshnyak.2000@mail.ru'; // ЗАМЕНИТЕ НА СВОЙ EMAIL
+    form.target = 'hiddenFrame';
 
+    // Поля формы (все скрытые)
     const fields = {
         message: orderText,
         _subject: 'Новый заказ из ресторана!',
-        _redirect: window.location.href // возврат на ту же страницу
+        _captcha: 'false' // отключаем капчу (опционально)
     };
 
     for (let key in fields) {
@@ -566,14 +576,22 @@
     }
 
     document.body.appendChild(form);
-    form.submit(); // страница перезагрузится, но редирект вернёт обратно
+    form.submit();
 
-    // Очищаем корзину (это выполнится после отправки, но до перезагрузки)
+    // Удаляем iframe через 2 секунды (чтобы он успел отправить запрос)
+    setTimeout(() => {
+        iframe.remove();
+    }, 2000);
+
+    // Очищаем корзину и форму
     cart = {};
     save();
     renderCart();
     updateBadge();
     document.getElementById('userComment').value = '';
+
+    // Сообщаем пользователю об успехе
+    alert('✅ Заказ отправлен!');
 }
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
