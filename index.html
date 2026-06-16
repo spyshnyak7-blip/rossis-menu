@@ -522,9 +522,10 @@
 
         // Оформление заказа 
        function placeOrder() {
-    let name = document.getElementById('userName').value.trim();
-    let table = document.getElementById('userTable').value.trim();
-    let comment = document.getElementById('userComment').value.trim();
+    // 1. Собираем данные
+    const name = document.getElementById('userName').value.trim();
+    const table = document.getElementById('userTable').value.trim();
+    const comment = document.getElementById('userComment').value.trim();
 
     if (!name || !table) {
         alert('Заполните имя и номер стола');
@@ -535,39 +536,32 @@
         return;
     }
 
-    // Формируем текст заказа
+    // 2. Формируем текст заказа
     let items = [];
     let total = 0;
     for (let id in cart) {
-        let p = products.find(x => x.id == id);
+        const p = products.find(x => x.id == id);
         if (p) {
             items.push(`${p.name} x${cart[id]} = ${p.price * cart[id]}₽`);
             total += p.price * cart[id];
         }
     }
-    let orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
+    const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // ----- ОТПРАВКА ЧЕРЕЗ IFRAME (без перезагрузки) -----
-    // Создаём невидимый iframe
-    const iframe = document.createElement('iframe');
-    iframe.name = 'hiddenFrame';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    // Создаём форму с target на iframe
+    // 3. Создаём форму и отправляем
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'https://formsubmit.co/pyshnyak.2000@mail.ru'; // ЗАМЕНИТЕ НА СВОЙ EMAIL
-    form.target = 'hiddenFrame';
+    form.action = 'https://formsubmit.co/pyshnyak.2000@mail.ru'; // ЗАМЕНИТЕ НА ВАШ EMAIL
 
-    // Поля формы (все скрытые)
+    // Поля формы (скрытые)
     const fields = {
         message: orderText,
         _subject: 'Новый заказ из ресторана!',
-        _captcha: 'false' // отключаем капчу (опционально)
+        _captcha: 'false',          // отключаем капчу
+        _redirect: window.location.href // возврат на эту же страницу
     };
 
-    for (let key in fields) {
+    for (const key in fields) {
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = key;
@@ -576,22 +570,14 @@
     }
 
     document.body.appendChild(form);
-    form.submit();
+    form.submit(); // отправка формы – страница перезагрузится и вернётся обратно
 
-    // Удаляем iframe через 2 секунды (чтобы он успел отправить запрос)
-    setTimeout(() => {
-        iframe.remove();
-    }, 2000);
-
-    // Очищаем корзину и форму
+    // 4. Очищаем корзину (это выполнится до перезагрузки)
     cart = {};
     save();
     renderCart();
     updateBadge();
     document.getElementById('userComment').value = '';
-
-    // Сообщаем пользователю об успехе
-    alert('✅ Заказ отправлен!');
 }
         // Управление выезжающей корзиной
         const cartPanel = document.getElementById('cartPanel');
