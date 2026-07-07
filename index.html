@@ -46,7 +46,7 @@
         }
         .card button:hover { background: #a34721; transform: scale(0.97); }
 
-        /* Корзина (десктоп) */
+        /* Корзина */
         .cart {
             flex: 1;
             background: white;
@@ -127,26 +127,27 @@
         header .logo h1 { margin: 0; font-size: 2rem; color: #c25b2e; }
         header .logo p { margin: 0; color: #7f6b5c; font-size: 0.9rem; }
 
-        /* ===== СКРЫТЫЙ ПЕРЕКЛЮЧАТЕЛЬ АДМИНА ===== */
-        .admin-toggle-wrap {
-            position: relative;
-        }
-        .admin-toggle-wrap .admin-label {
+        /* Кнопка переключения ролей */
+        .role-toggle {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            background: #f5f0eb;
+            padding: 6px 12px 6px 16px;
+            border-radius: 30px;
+            cursor: pointer;
             font-size: 0.85rem;
             color: #7f6b5c;
-            cursor: pointer;
-            padding: 6px 14px;
-            border-radius: 30px;
-            background: #f5f0eb;
             transition: 0.3s;
+            border: 1px solid #e0d5cb;
         }
-        .admin-toggle-wrap .admin-label:hover {
+        .role-toggle:hover {
             background: #ede5dd;
         }
-        .admin-toggle-wrap input[type="checkbox"] {
+        .role-toggle .lock-icon {
+            font-size: 0.8rem;
+        }
+        .role-toggle input[type="checkbox"] {
             width: 40px;
             height: 22px;
             border-radius: 30px;
@@ -157,7 +158,7 @@
             transition: 0.3s;
             flex-shrink: 0;
         }
-        .admin-toggle-wrap input[type="checkbox"]::after {
+        .role-toggle input[type="checkbox"]::after {
             content: '';
             position: absolute;
             top: 2px;
@@ -169,15 +170,196 @@
             transition: 0.3s;
             box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
-        .admin-toggle-wrap input[type="checkbox"]:checked {
+        .role-toggle input[type="checkbox"]:checked {
             background: #c25b2e;
         }
-        .admin-toggle-wrap input[type="checkbox"]:checked::after {
+        .role-toggle input[type="checkbox"]:checked::after {
             left: 20px;
         }
-        .admin-toggle-wrap .lock-icon {
+
+        /* Заголовки категорий */
+        .cat-title { color: #7f6b5c; border-bottom: 2px solid #c25b2e; padding-bottom: 5px; margin: 30px 0 10px 0; grid-column: 1 / -1; }
+        .sub-title { color: #7f6b5c; margin: 15px 0 5px 0; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
+        .subcategory-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        /* ===== ПАНЕЛЬ ЗАКАЗОВ ДЛЯ ОФИЦИАНТА ===== */
+        .all-orders {
+            flex: 1.2;
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #f0e0d4;
+            position: sticky;
+            top: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            min-width: 280px;
+        }
+        .all-orders h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0;
+            border-bottom: 2px solid #c25b2e;
+            padding-bottom: 10px;
+        }
+        .all-orders .badge {
+            background: #c25b2e20;
+            color: #c25b2e;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        /* Счётчик новых заказов */
+        .new-orders-badge {
+            background: #d32f2f;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 40px;
             font-size: 0.7rem;
-            opacity: 0.6;
+            font-weight: 700;
+            animation: pulse-badge 1.5s ease-in-out 3;
+        }
+        @keyframes pulse-badge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .order-card {
+            background: #fcf8f5;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border-left: 4px solid #c25b2e;
+            transition: 0.3s;
+            position: relative;
+        }
+        .order-card.new-order {
+            border-left-color: #d32f2f;
+            background: #fff5f5;
+            animation: pulse-card 1.5s ease-in-out 3;
+        }
+        .order-card.new-order::before {
+            content: '🆕 НОВЫЙ';
+            position: absolute;
+            top: -8px;
+            right: 14px;
+            background: #d32f2f;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+        @keyframes pulse-card {
+            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.2); }
+            70% { box-shadow: 0 0 0 8px rgba(211, 47, 47, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+
+        .order-card .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .order-card .order-header small {
+            font-weight: 400;
+            color: #8f735b;
+            font-size: 0.8rem;
+        }
+        .order-card .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed #eee6dd;
+            font-size: 0.9rem;
+        }
+        .order-card .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-card .order-total {
+            font-weight: 700;
+            text-align: right;
+            border-top: 2px solid #e2d3c4;
+            padding-top: 8px;
+            margin-top: 6px;
+        }
+        .order-card .order-status {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .order-card .order-status .status-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: auto;
+        }
+        .status-label.new { background: #ffcdd2; color: #c62828; }
+        .status-label.working { background: #fff3cd; color: #856404; }
+        .status-label.ready { background: #c8e6c9; color: #2e7d32; }
+
+        .order-card .order-status button {
+            border: none;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .order-card .order-status .btn-status {
+            background: #e8f0e8;
+            color: #2f6b47;
+        }
+        .order-card .order-status .btn-status:hover {
+            background: #d0e0d0;
+        }
+        .order-card .order-status .btn-del {
+            background: #f3e0d8;
+            color: #9a4f3a;
+        }
+        .order-card .order-status .btn-del:hover {
+            background: #eacbc0;
+        }
+        .order-card .order-status .btn-dup {
+            background: transparent;
+            border: 1px solid #d6c4b6;
+            color: #5c3c26;
+        }
+        .order-card .order-status .btn-dup:hover {
+            background: #f0e4da;
+        }
+        .grand-total {
+            background: #f2e8df;
+            border-radius: 16px;
+            padding: 14px;
+            margin-top: 8px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .empty-orders {
+            color: #aa8b6e;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
         }
 
         /* Модалка ввода пароля */
@@ -255,139 +437,13 @@
             min-height: 24px;
         }
 
-        /* Заголовки категорий */
-        .cat-title { color: #7f6b5c; border-bottom: 2px solid #c25b2e; padding-bottom: 5px; margin: 30px 0 10px 0; grid-column: 1 / -1; }
-        .sub-title { color: #7f6b5c; margin: 15px 0 5px 0; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
-        .subcategory-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
+        /* Скрытие элементов для разных ролей */
+        .role-guest { display: block; }
+        .role-waiter { display: none; }
 
-        /* ===== ПАНЕЛЬ ВСЕХ ЗАКАЗОВ ===== */
-        .all-orders {
-            flex: 1.2;
-            background: white;
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border: 1px solid #f0e0d4;
-            position: sticky;
-            top: 20px;
-            max-height: 90vh;
-            overflow-y: auto;
-            min-width: 280px;
-        }
-        .all-orders h2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0;
-            border-bottom: 2px solid #c25b2e;
-            padding-bottom: 10px;
-        }
-        .all-orders .badge {
-            background: #c25b2e20;
-            color: #c25b2e;
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .order-card {
-            background: #fcf8f5;
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 14px;
-            border-left: 4px solid #c25b2e;
-        }
-        .order-card .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        .order-card .order-header small {
-            font-weight: 400;
-            color: #8f735b;
-            font-size: 0.8rem;
-        }
-        .order-card .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px dashed #eee6dd;
-            font-size: 0.9rem;
-        }
-        .order-card .order-item:last-child {
-            border-bottom: none;
-        }
-        .order-card .order-total {
-            font-weight: 700;
-            text-align: right;
-            border-top: 2px solid #e2d3c4;
-            padding-top: 8px;
-            margin-top: 6px;
-        }
-        .order-card .order-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .order-card .order-actions button {
-            border: none;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: 0.15s;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-        .order-card .order-actions .btn-del {
-            background: #f3e0d8;
-            color: #9a4f3a;
-        }
-        .order-card .order-actions .btn-del:hover {
-            background: #eacbc0;
-        }
-        .order-card .order-actions .btn-dup {
-            background: transparent;
-            border: 1px solid #d6c4b6;
-            color: #5c3c26;
-        }
-        .order-card .order-actions .btn-dup:hover {
-            background: #f0e4da;
-        }
-        .grand-total {
-            background: #f2e8df;
-            border-radius: 16px;
-            padding: 14px;
-            margin-top: 8px;
-            text-align: right;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        .empty-orders {
-            color: #aa8b6e;
-            text-align: center;
-            padding: 30px 0;
-            font-size: 0.9rem;
-        }
-        .admin-only {
-            background: #fff3e6;
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
-            color: #c25b2e;
-            text-align: center;
-            margin-bottom: 12px;
-            border: 1px dashed #c25b2e;
-        }
+        body.waiter-mode .role-guest { display: none; }
+        body.waiter-mode .role-waiter { display: block; }
+        body.waiter-mode .all-orders { flex: 1; }
 
         /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
         @media (max-width: 768px) {
@@ -471,7 +527,7 @@
             header { flex-direction: column; text-align: center; padding: 15px; }
             header .logo h1 { font-size: 1.6rem; }
             header .logo p { font-size: 0.8rem; }
-            .admin-toggle-wrap .admin-label { font-size: 0.75rem; padding: 4px 10px; }
+            .role-toggle { font-size: 0.75rem; padding: 4px 10px; }
         }
 
         @media (min-width: 769px) {
@@ -482,28 +538,25 @@
 </head>
 <body>
 
-    <!-- Шапка -->
+    <!-- ШАПКА -->
     <header>
         <div class="logo">
             <h1>ROSSI'S CLUB</h1>
             <p>Заказывайте прямо со стола</p>
         </div>
-        <!-- Скрытый переключатель админа (пароль защищён) -->
-        <div class="admin-toggle-wrap">
-            <label class="admin-label" id="adminToggleLabel">
-                <span class="lock-icon">🔒</span>
-                <span id="adminStatusText">Гость</span>
-                <input type="checkbox" id="adminCheckbox">
-                <span>Админ</span>
-            </label>
+        <div class="role-toggle" id="roleToggle">
+            <span class="lock-icon">🔒</span>
+            <span id="roleStatusText">Гость</span>
+            <input type="checkbox" id="waiterCheckbox">
+            <span>Официант</span>
         </div>
     </header>
 
     <!-- Модалка ввода пароля -->
     <div class="password-modal" id="passwordModal">
         <div class="modal-content">
-            <h3>🔐 Вход в режим администратора</h3>
-            <p style="color:#7f6b5c; font-size:0.9rem;">Введите пароль для доступа</p>
+            <h3>🔐 Вход для официанта</h3>
+            <p style="color:#7f6b5c; font-size:0.9rem;">Введите пароль для доступа к заказам</p>
             <input type="password" id="passwordInput" placeholder="••••••" maxlength="10">
             <div class="error-msg" id="passwordError"></div>
             <div class="btn-row">
@@ -515,39 +568,40 @@
 
     <!-- Затемнение для корзины (мобильные) -->
     <div class="cart-overlay" id="cartOverlay"></div>
-    <!-- Плавающая кнопка корзины -->
     <button class="cart-toggle-btn" id="cartToggleBtn">
         🛒 <span class="badge" id="cartBadge">0</span>
     </button>
 
     <div class="container">
-        <!-- Меню -->
-        <div class="menu" id="menu"></div>
+        <!-- ===== МЕНЮ + КОРЗИНА (ТОЛЬКО ДЛЯ ГОСТЕЙ) ===== -->
+        <div class="role-guest" style="width:100%; display:flex; gap:30px; flex-wrap:wrap;">
+            <div class="menu" id="menu"></div>
 
-        <!-- Корзина -->
-        <div class="cart" id="cartPanel">
-            <h2>Корзина <button class="clear-cart" id="clearCartBtn">Очистить</button></h2>
-            <div id="cartItems" class="cart-items"></div>
-            <div class="total">Итого: <span id="cartTotal">0</span> ₽</div>
-            <input type="text" id="userName" placeholder="Ваше имя *">
-            <input type="text" id="userTable" placeholder="Номер стола *">
-            <textarea id="userComment" rows="2" placeholder="Пожелания (необязательно)"></textarea>
-            <button class="order-btn" id="orderBtn">✅ Оформить заказ</button>
+            <div class="cart" id="cartPanel">
+                <h2>Корзина <button class="clear-cart" id="clearCartBtn">Очистить</button></h2>
+                <div id="cartItems" class="cart-items"></div>
+                <div class="total">Итого: <span id="cartTotal">0</span> ₽</div>
+                <input type="text" id="userName" placeholder="Ваше имя *">
+                <input type="text" id="userTable" placeholder="Номер стола *">
+                <textarea id="userComment" rows="2" placeholder="Пожелания (необязательно)"></textarea>
+                <button class="order-btn" id="orderBtn">✅ Добавить к заказу стола</button>
+            </div>
         </div>
 
-        <!-- Панель заказов -->
-        <div class="all-orders" id="allOrdersPanel">
+        <!-- ===== ПАНЕЛЬ ЗАКАЗОВ (ДЛЯ ОФИЦИАНТА) ===== -->
+        <div class="role-waiter all-orders" id="allOrdersPanel" style="width:100%;">
             <h2>
-                📋 Заказы
+                📋 Все заказы
                 <span class="badge" id="ordersCount">0</span>
+                <span id="newOrdersBadge" class="new-orders-badge" style="display:none;">🆕 0</span>
             </h2>
             <div id="ordersList"></div>
         </div>
     </div>
 
     <script>
-        // ===== ПАРОЛЬ ДЛЯ АДМИНА (МОЖНО ИЗМЕНИТЬ) =====
-        const ADMIN_PASSWORD = '8569'; // ← СМЕНИТЕ НА СВОЙ ПАРОЛЬ
+        // ===== ПАРОЛЬ ДЛЯ ОФИЦИАНТА =====
+        const WAITER_PASSWORD = '8569'; // ← СМЕНИТЕ НА СВОЙ ПАРОЛЬ
 
         // ===== МЕНЮ =====
         const products = [
@@ -640,30 +694,18 @@
 
         let cart = {};
         let allOrders = [];
-        let isAdmin = false;
+        let isWaiter = false;
+        let viewedOrders = new Set(); // Храним ID уже просмотренных заказов
         const categoryOrder = ['Кухня', 'Бар'];
+        let orderIdCounter = 0;
 
-        // ===== ФУНКЦИИ ДЛЯ РАБОТЫ С ЗАКАЗАМИ =====
-        function getCurrentUser() {
-            const name = document.getElementById('userName').value.trim() || 'Гость';
-            const table = document.getElementById('userTable').value.trim() || '0';
-            return { name, table };
-        }
-
-        function getFilteredOrders() {
-            if (isAdmin) return allOrders;
-            const user = getCurrentUser();
-            return allOrders.filter(o => 
-                o.name === user.name && o.table === user.table
-            );
-        }
-
-        // ===== СОХРАНЕНИЕ =====
+        // ===== ЗАГРУЗКА/СОХРАНЕНИЕ =====
         function save() { 
             localStorage.setItem('cart', JSON.stringify(cart)); 
             localStorage.setItem('allOrders', JSON.stringify(allOrders)); 
-            localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+            localStorage.setItem('orderIdCounter', String(orderIdCounter));
         }
+
         function load() {
             let saved = localStorage.getItem('cart');
             if (saved) { try { cart = JSON.parse(saved); } catch(e) { cart = {}; } }
@@ -673,16 +715,38 @@
             if (savedOrders) { try { allOrders = JSON.parse(savedOrders); } catch(e) { allOrders = []; } }
             else allOrders = [];
             
-            const savedAdmin = localStorage.getItem('isAdmin');
-            if (savedAdmin === 'true') {
-                isAdmin = true;
-                document.getElementById('adminCheckbox').checked = true;
-                updateAdminUI();
+            let savedCounter = localStorage.getItem('orderIdCounter');
+            if (savedCounter) { orderIdCounter = parseInt(savedCounter) || 0; }
+            
+            // Восстанавливаем просмотренные заказы
+            let savedViewed = localStorage.getItem('viewedOrders');
+            if (savedViewed) {
+                try { viewedOrders = new Set(JSON.parse(savedViewed)); } catch(e) { viewedOrders = new Set(); }
             }
             
             renderCart();
             updateBadge();
             renderAllOrders();
+            updateNewOrdersBadge();
+        }
+
+        // ===== ОБНОВЛЕНИЕ БЕЙДЖА НОВЫХ ЗАКАЗОВ =====
+        function updateNewOrdersBadge() {
+            const badge = document.getElementById('newOrdersBadge');
+            if (!badge) return;
+            
+            const newOrders = allOrders.filter(o => o.status === 'new' && !viewedOrders.has(o.id));
+            const count = newOrders.length;
+            
+            if (count > 0 && isWaiter) {
+                badge.style.display = 'inline-block';
+                badge.textContent = `🆕 ${count}`;
+                // Мигаем заголовком
+                document.querySelector('.all-orders h2').style.color = '#d32f2f';
+            } else {
+                badge.style.display = 'none';
+                document.querySelector('.all-orders h2').style.color = '';
+            }
         }
 
         // ===== КОРЗИНА =====
@@ -693,6 +757,7 @@
             updateBadge();
             showToast('✅ ' + (products.find(p => p.id === id)?.name || '') + ' добавлено');
         }
+
         function removeFromCart(id) {
             if (cart[id]) {
                 cart[id]--;
@@ -702,6 +767,7 @@
                 updateBadge();
             }
         }
+
         function clearCart() {
             cart = {};
             save();
@@ -741,60 +807,86 @@
             totalSpan.innerText = total;
         }
 
-        // ===== ВСЕ ЗАКАЗЫ (с фильтром) =====
+        // ===== ВСЕ ЗАКАЗЫ =====
         function renderAllOrders() {
             const container = document.getElementById('ordersList');
             const countSpan = document.getElementById('ordersCount');
-            const filtered = getFilteredOrders();
             
-            if (filtered.length === 0) {
+            if (allOrders.length === 0) {
                 container.innerHTML = '<div class="empty-orders">Пока нет заказов</div>';
                 countSpan.textContent = '0';
                 return;
             }
 
             let html = '';
-            if (isAdmin) {
-                html += '<div class="admin-only">👑 Режим администратора — видны все заказы</div>';
-            }
-
             let grandTotal = 0;
-            filtered.forEach((order, index) => {
+
+            // Сортируем: сначала новые, потом по столам
+            const sortedOrders = [...allOrders].sort((a, b) => {
+                const aNew = a.status === 'new' && !viewedOrders.has(a.id);
+                const bNew = b.status === 'new' && !viewedOrders.has(b.id);
+                if (aNew && !bNew) return -1;
+                if (!aNew && bNew) return 1;
+                return a.table - b.table;
+            });
+
+            sortedOrders.forEach((order, index) => {
                 const realIndex = allOrders.indexOf(order);
+                const isNew = order.status === 'new' && !viewedOrders.has(order.id);
                 let orderTotal = 0;
                 let itemsHtml = '';
+
+                // Объединяем одинаковые позиции
+                const mergedItems = {};
                 order.items.forEach(item => {
-                    const price = Number(item.price) || 0;
-                    const qty = Number(item.qty) || 1;
-                    const sum = price * qty;
+                    const key = item.name;
+                    if (mergedItems[key]) {
+                        mergedItems[key].qty += item.qty;
+                    } else {
+                        mergedItems[key] = { ...item };
+                    }
+                });
+
+                Object.values(mergedItems).forEach(item => {
+                    const sum = item.price * item.qty;
                     orderTotal += sum;
                     itemsHtml += `
                         <div class="order-item">
-                            <span>${item.name} x${qty}</span>
+                            <span>${item.name} x${item.qty}</span>
                             <span>${sum}₽</span>
                         </div>
                     `;
                 });
+
                 grandTotal += orderTotal;
 
+                const statusLabels = {
+                    'new': '<span class="status-label new">🆕 Новый</span>',
+                    'working': '<span class="status-label working">👨‍🍳 В работе</span>',
+                    'ready': '<span class="status-label ready">✅ Готов</span>'
+                };
+
                 html += `
-                    <div class="order-card">
+                    <div class="order-card ${isNew ? 'new-order' : ''}">
                         <div class="order-header">
-                            Стол №${order.table}
-                            <small>${order.name || 'Гость'}</small>
+                            🪑 Стол №${order.table}
+                            <small>${order.name || 'Гость'} | ${order.items.length} позиций</small>
                         </div>
                         ${itemsHtml}
-                        <div class="order-total">Итого: ${orderTotal}₽</div>
-                        ${isAdmin ? `
-                        <div class="order-actions">
-                            <button class="btn-del" onclick="deleteOrder(${realIndex})">✕ Удалить</button>
+                        <div class="order-total">💳 Итого: ${orderTotal}₽</div>
+                        <div class="order-status">
+                            ${statusLabels[order.status] || statusLabels.new}
+                            ${order.status === 'new' ? `<button class="btn-status" onclick="changeStatus(${realIndex}, 'working')">👨‍🍳 Взять в работу</button>` : ''}
+                            ${order.status === 'working' ? `<button class="btn-status" onclick="changeStatus(${realIndex}, 'ready')">✅ Отметить готовым</button>` : ''}
+                            ${order.status === 'ready' ? `<button class="btn-status" onclick="changeStatus(${realIndex}, 'new')">🔄 Вернуть</button>` : ''}
                             <button class="btn-dup" onclick="duplicateOrder(${realIndex})">📋 Дублировать</button>
-                        </div>` : ''}
+                            <button class="btn-del" onclick="deleteOrder(${realIndex})">✕</button>
+                        </div>
                     </div>
                 `;
             });
 
-            if (isAdmin && filtered.length > 1) {
+            if (allOrders.length > 1) {
                 html += `
                     <div class="grand-total">
                         💰 Общая сумма всех заказов: ${grandTotal}₽
@@ -803,12 +895,30 @@
             }
 
             container.innerHTML = html;
-            countSpan.textContent = filtered.length;
+            countSpan.textContent = allOrders.length;
+            updateNewOrdersBadge();
         }
 
-        // ===== УПРАВЛЕНИЕ ЗАКАЗАМИ (только для админа) =====
+        // ===== ИЗМЕНЕНИЕ СТАТУСА =====
+        function changeStatus(index, newStatus) {
+            const order = allOrders[index];
+            if (!order) return;
+            
+            order.status = newStatus;
+            
+            // Если заказ становится "в работе" или "готов" — отмечаем как просмотренный
+            if (newStatus === 'working' || newStatus === 'ready') {
+                viewedOrders.add(order.id);
+                localStorage.setItem('viewedOrders', JSON.stringify([...viewedOrders]));
+            }
+            
+            save();
+            renderAllOrders();
+            showToast(`Статус заказа стола №${order.table} изменён на "${newStatus}"`);
+        }
+
+        // ===== УПРАВЛЕНИЕ ЗАКАЗАМИ =====
         function deleteOrder(index) {
-            if (!isAdmin) return;
             if (confirm(`Удалить заказ стола №${allOrders[index].table}?`)) {
                 allOrders.splice(index, 1);
                 save();
@@ -818,17 +928,96 @@
         }
 
         function duplicateOrder(index) {
-            if (!isAdmin) return;
             const original = allOrders[index];
             const newOrder = {
+                id: ++orderIdCounter,
                 table: original.table,
                 name: original.name || 'Гость',
-                items: original.items.map(item => ({ ...item }))
+                items: original.items.map(item => ({ ...item })),
+                status: 'new',
+                comment: original.comment || '—',
+                timestamp: new Date().toLocaleString()
             };
             allOrders.push(newOrder);
             save();
             renderAllOrders();
-            showToast('📋 Заказ продублирован');
+            showToast('📋 Заказ продублирован для стола ' + original.table);
+        }
+
+        // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+        function placeOrder() {
+            const name = document.getElementById('userName').value.trim();
+            const table = document.getElementById('userTable').value.trim();
+            const comment = document.getElementById('userComment').value.trim();
+
+            if (!name || !table) {
+                alert('Заполните имя и номер стола');
+                return;
+            }
+            if (Object.keys(cart).length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+
+            let orderItems = [];
+            let total = 0;
+            for (let id in cart) {
+                const p = products.find(x => x.id == id);
+                if (p) {
+                    const qty = cart[id];
+                    orderItems.push({ name: p.name, price: p.price, qty: qty });
+                    total += p.price * qty;
+                }
+            }
+
+            // Проверяем существующий заказ на этот стол
+            let existingOrder = allOrders.find(o => o.table == table);
+
+            if (existingOrder) {
+                // Добавляем к существующему
+                existingOrder.items.push(...orderItems);
+                existingOrder.name = name;
+                if (comment) existingOrder.comment = comment;
+                // Если заказ был готов — возвращаем в работу
+                if (existingOrder.status === 'ready') {
+                    existingOrder.status = 'working';
+                }
+                showToast(`✅ Блюда добавлены к столу №${table}`);
+            } else {
+                // Создаём новый заказ
+                const newOrder = {
+                    id: ++orderIdCounter,
+                    table: parseInt(table),
+                    name: name,
+                    items: orderItems,
+                    comment: comment || '—',
+                    status: 'new',
+                    timestamp: new Date().toLocaleString()
+                };
+                allOrders.push(newOrder);
+                showToast(`✅ Новый заказ для стола №${table}`);
+            }
+
+            cart = {};
+            save();
+            renderCart();
+            updateBadge();
+            renderAllOrders();
+            document.getElementById('userComment').value = '';
+
+            // Отправка в Google Sheets
+            const itemsText = orderItems.map(item => `${item.name} x${item.qty} = ${item.price * item.qty}₽`).join('\n');
+            const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${itemsText}\n\nИТОГО: ${total} ₽`;
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8JvuYERMg-QzauWsJsFZanKwoJaZCQNUlgBpfrStFmdCOveIDbP1Z9mP2XRW8G4Zo/exec';
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: orderText,
+                    subject: 'Новый заказ из ресторана!'
+                })
+            }).catch(() => {});
         }
 
         // ===== РЕНДЕР МЕНЮ =====
@@ -897,7 +1086,7 @@
             });
         }
 
-        // ===== БЕЙДЖ =====
+        // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
         function updateBadge() {
             const badge = document.getElementById('cartBadge');
             const total = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
@@ -905,7 +1094,6 @@
             badge.style.display = total > 0 ? 'block' : 'none';
         }
 
-        // ===== ТОСТ =====
         function showToast(msg) {
             const old = document.querySelector('.toast');
             if (old) old.remove();
@@ -927,65 +1115,6 @@
             }, 2000);
         }
 
-        // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
-        function placeOrder() {
-            const name = document.getElementById('userName').value.trim();
-            const table = document.getElementById('userTable').value.trim();
-            const comment = document.getElementById('userComment').value.trim();
-
-            if (!name || !table) {
-                alert('Заполните имя и номер стола');
-                return;
-            }
-            if (Object.keys(cart).length === 0) {
-                alert('Корзина пуста');
-                return;
-            }
-
-            let items = [], total = 0;
-            let orderItems = [];
-            for (let id in cart) {
-                const p = products.find(x => x.id == id);
-                if (p) {
-                    const qty = cart[id];
-                    const sum = p.price * qty;
-                    items.push(`${p.name} x${qty} = ${sum}₽`);
-                    total += sum;
-                    orderItems.push({ name: p.name, price: p.price, qty: qty });
-                }
-            }
-
-            const newOrder = {
-                table: table,
-                name: name,
-                items: orderItems,
-                comment: comment || '—',
-                timestamp: new Date().toLocaleString()
-            };
-            allOrders.push(newOrder);
-
-            cart = {};
-            save();
-            renderCart();
-            updateBadge();
-            renderAllOrders();
-            document.getElementById('userComment').value = '';
-
-            const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8JvuYERMg-QzauWsJsFZanKwoJaZCQNUlgBpfrStFmdCOveIDbP1Z9mP2XRW8G4Zo/exec';
-            fetch(scriptUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: orderText,
-                    subject: 'Новый заказ из ресторана!'
-                })
-            }).catch(() => {});
-
-            alert('✅ Заказ отправлен!');
-        }
-
         // ===== УПРАВЛЕНИЕ КОРЗИНОЙ (мобильная) =====
         const cartPanel = document.getElementById('cartPanel');
         const overlay = document.getElementById('cartOverlay');
@@ -997,37 +1126,41 @@
         toggleBtn.addEventListener('click', toggleCart);
         overlay.addEventListener('click', closeCart);
 
-        // ===== УПРАВЛЕНИЕ РЕЖИМОМ АДМИНА С ПАРОЛЕМ =====
-        const adminCheckbox = document.getElementById('adminCheckbox');
+        // ===== УПРАВЛЕНИЕ РЕЖИМОМ ОФИЦИАНТА =====
+        const waiterCheckbox = document.getElementById('waiterCheckbox');
         const passwordModal = document.getElementById('passwordModal');
         const passwordInput = document.getElementById('passwordInput');
         const passwordError = document.getElementById('passwordError');
-        const adminStatusText = document.getElementById('adminStatusText');
+        const roleStatusText = document.getElementById('roleStatusText');
 
-        function updateAdminUI() {
-            if (isAdmin) {
-                adminCheckbox.checked = true;
-                adminStatusText.textContent = 'Админ';
-                document.querySelector('.admin-toggle-wrap .lock-icon').textContent = '👑';
-            } else {
-                adminCheckbox.checked = false;
-                adminStatusText.textContent = 'Гость';
-                document.querySelector('.admin-toggle-wrap .lock-icon').textContent = '🔒';
+        function setWaiterMode(enabled) {
+            isWaiter = enabled;
+            document.body.classList.toggle('waiter-mode', enabled);
+            waiterCheckbox.checked = enabled;
+            roleStatusText.textContent = enabled ? 'Официант' : 'Гость';
+            document.querySelector('.role-toggle .lock-icon').textContent = enabled ? '👑' : '🔒';
+            
+            if (enabled) {
+                // Помечаем все новые заказы как просмотренные
+                allOrders.forEach(o => {
+                    if (o.status === 'new') {
+                        viewedOrders.add(o.id);
+                    }
+                });
+                localStorage.setItem('viewedOrders', JSON.stringify([...viewedOrders]));
             }
+            
+            localStorage.setItem('isWaiter', enabled ? 'true' : 'false');
             renderAllOrders();
+            updateNewOrdersBadge();
         }
 
-        // При клике на чекбокс — показываем модалку
-        adminCheckbox.addEventListener('click', function(e) {
+        waiterCheckbox.addEventListener('click', function(e) {
             e.preventDefault();
-            if (isAdmin) {
-                // Если админ уже включён — выключаем без пароля
-                isAdmin = false;
-                save();
-                updateAdminUI();
+            if (isWaiter) {
+                setWaiterMode(false);
                 showToast('👤 Режим гостя');
             } else {
-                // Включаем админ — просим пароль
                 passwordModal.classList.add('active');
                 passwordInput.value = '';
                 passwordError.textContent = '';
@@ -1035,14 +1168,11 @@
             }
         });
 
-        // Подтверждение пароля
         document.getElementById('passwordConfirm').addEventListener('click', function() {
-            if (passwordInput.value === ADMIN_PASSWORD) {
-                isAdmin = true;
-                save();
-                updateAdminUI();
+            if (passwordInput.value === WAITER_PASSWORD) {
+                setWaiterMode(true);
                 passwordModal.classList.remove('active');
-                showToast('👑 Режим администратора включён');
+                showToast('👑 Режим официанта включён');
             } else {
                 passwordError.textContent = '❌ Неверный пароль';
                 passwordInput.value = '';
@@ -1050,38 +1180,53 @@
             }
         });
 
-        // Отмена
         document.getElementById('passwordCancel').addEventListener('click', function() {
             passwordModal.classList.remove('active');
             passwordError.textContent = '';
-            adminCheckbox.checked = false;
+            waiterCheckbox.checked = false;
         });
 
-        // Закрытие по клику вне модалки
         passwordModal.addEventListener('click', function(e) {
             if (e.target === this) {
                 passwordModal.classList.remove('active');
                 passwordError.textContent = '';
-                adminCheckbox.checked = false;
+                waiterCheckbox.checked = false;
             }
         });
 
-        // Enter в поле пароля
         passwordInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('passwordConfirm').click();
             }
         });
 
+        // ===== АВТООБНОВЛЕНИЕ ЗАКАЗОВ =====
+        function autoRefresh() {
+            if (isWaiter) {
+                // Проверяем новые заказы
+                const newOrders = allOrders.filter(o => o.status === 'new' && !viewedOrders.has(o.id));
+                if (newOrders.length > 0) {
+                    renderAllOrders();
+                    updateNewOrdersBadge();
+                }
+            }
+        }
+
+        // Проверка каждые 5 секунд
+        setInterval(autoRefresh, 5000);
+
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         window.addEventListener('load', function() {
+            // Загружаем режим
+            const savedWaiter = localStorage.getItem('isWaiter');
+            if (savedWaiter === 'true') {
+                setWaiterMode(true);
+            }
+
             renderMenu();
             load();
             document.getElementById('clearCartBtn').addEventListener('click', clearCart);
             document.getElementById('orderBtn').addEventListener('click', placeOrder);
-            
-            document.getElementById('userName').addEventListener('input', renderAllOrders);
-            document.getElementById('userTable').addEventListener('input', renderAllOrders);
 
             if (window.innerWidth > 768) {
                 cartPanel.classList.add('open');
