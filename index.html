@@ -13,7 +13,7 @@
             background: #000000;
             min-height: 100vh;
         }
-        .container { max-width: 1300px; margin: 0 auto; display: flex; gap: 30px; flex-wrap: wrap; }
+        .container { max-width: 1400px; margin: 0 auto; display: flex; gap: 30px; flex-wrap: wrap; }
 
         /* Меню (сетка) */
         .menu {
@@ -115,6 +115,7 @@
         header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 20px;
             padding: 15px 20px;
             background: rgba(255,255,255,0.8);
@@ -123,18 +124,269 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-        header img { height: 70px; width: auto; }
-        header h1 { margin: 0; font-size: 2rem; color: #c25b2e; }
-        header p { margin: 0; color: #7f6b5c; font-size: 0.9rem; }
+        header .logo h1 { margin: 0; font-size: 2rem; color: #c25b2e; }
+        header .logo p { margin: 0; color: #7f6b5c; font-size: 0.9rem; }
+
+        /* ===== СКРЫТЫЙ ПЕРЕКЛЮЧАТЕЛЬ АДМИНА ===== */
+        .admin-toggle-wrap {
+            position: relative;
+        }
+        .admin-toggle-wrap .admin-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #7f6b5c;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 30px;
+            background: #f5f0eb;
+            transition: 0.3s;
+        }
+        .admin-toggle-wrap .admin-label:hover {
+            background: #ede5dd;
+        }
+        .admin-toggle-wrap input[type="checkbox"] {
+            width: 40px;
+            height: 22px;
+            border-radius: 30px;
+            background: #ddd;
+            appearance: none;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .admin-toggle-wrap input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .admin-toggle-wrap input[type="checkbox"]:checked {
+            background: #c25b2e;
+        }
+        .admin-toggle-wrap input[type="checkbox"]:checked::after {
+            left: 20px;
+        }
+        .admin-toggle-wrap .lock-icon {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        /* Модалка ввода пароля */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal.active {
+            display: flex;
+        }
+        .password-modal .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .password-modal .modal-content h3 {
+            margin-top: 0;
+            color: #c25b2e;
+        }
+        .password-modal .modal-content input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            border: 2px solid #ddd;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 4px;
+            margin: 12px 0;
+        }
+        .password-modal .modal-content input:focus {
+            border-color: #c25b2e;
+            outline: none;
+        }
+        .password-modal .modal-content .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .password-modal .modal-content .btn-row button {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .password-modal .modal-content .btn-row .btn-confirm {
+            background: #c25b2e;
+            color: white;
+        }
+        .password-modal .modal-content .btn-row .btn-confirm:hover {
+            background: #a34721;
+        }
+        .password-modal .modal-content .btn-row .btn-cancel {
+            background: #e8e0d8;
+            color: #5c3c26;
+        }
+        .password-modal .modal-content .btn-row .btn-cancel:hover {
+            background: #ddd2c8;
+        }
+        .password-modal .modal-content .error-msg {
+            color: #d32f2f;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 24px;
+        }
 
         /* Заголовки категорий */
-        h2 { color: #7f6b5c; border-bottom: 2px solid #c25b2e; padding-bottom: 5px; margin: 30px 0 10px 0; grid-column: 1 / -1; }
-        h3 { color: #7f6b5c; margin: 15px 0 5px 0; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
+        .cat-title { color: #7f6b5c; border-bottom: 2px solid #c25b2e; padding-bottom: 5px; margin: 30px 0 10px 0; grid-column: 1 / -1; }
+        .sub-title { color: #7f6b5c; margin: 15px 0 5px 0; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }
         .subcategory-items {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-top: 10px;
+        }
+
+        /* ===== ПАНЕЛЬ ВСЕХ ЗАКАЗОВ ===== */
+        .all-orders {
+            flex: 1.2;
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid #f0e0d4;
+            position: sticky;
+            top: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            min-width: 280px;
+        }
+        .all-orders h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0;
+            border-bottom: 2px solid #c25b2e;
+            padding-bottom: 10px;
+        }
+        .all-orders .badge {
+            background: #c25b2e20;
+            color: #c25b2e;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .order-card {
+            background: #fcf8f5;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border-left: 4px solid #c25b2e;
+        }
+        .order-card .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .order-card .order-header small {
+            font-weight: 400;
+            color: #8f735b;
+            font-size: 0.8rem;
+        }
+        .order-card .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed #eee6dd;
+            font-size: 0.9rem;
+        }
+        .order-card .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-card .order-total {
+            font-weight: 700;
+            text-align: right;
+            border-top: 2px solid #e2d3c4;
+            padding-top: 8px;
+            margin-top: 6px;
+        }
+        .order-card .order-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .order-card .order-actions button {
+            border: none;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .order-card .order-actions .btn-del {
+            background: #f3e0d8;
+            color: #9a4f3a;
+        }
+        .order-card .order-actions .btn-del:hover {
+            background: #eacbc0;
+        }
+        .order-card .order-actions .btn-dup {
+            background: transparent;
+            border: 1px solid #d6c4b6;
+            color: #5c3c26;
+        }
+        .order-card .order-actions .btn-dup:hover {
+            background: #f0e4da;
+        }
+        .grand-total {
+            background: #f2e8df;
+            border-radius: 16px;
+            padding: 14px;
+            margin-top: 8px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .empty-orders {
+            color: #aa8b6e;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
+        }
+        .admin-only {
+            background: #fff3e6;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            color: #c25b2e;
+            text-align: center;
+            margin-bottom: 12px;
+            border: 1px dashed #c25b2e;
         }
 
         /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
@@ -147,7 +399,6 @@
             .price { font-size: 1.1rem; }
             .card button { padding: 10px; font-size: 0.9rem; }
 
-            /* Корзина становится выезжающей */
             .cart {
                 position: fixed;
                 bottom: 0;
@@ -178,7 +429,13 @@
             }
             .cart-overlay.active { display: block; }
 
-            /* Плавающая кнопка корзины */
+            .all-orders {
+                position: relative;
+                top: auto;
+                max-height: none;
+                margin-top: 20px;
+            }
+
             .cart-toggle-btn {
                 position: fixed;
                 bottom: 20px;
@@ -211,21 +468,12 @@
                 text-align: center;
             }
 
-            /* Скрываем статическую корзину на мобильных (она уже fixed) */
-            .cart-desktop { display: none; }
-
-            /* Увеличиваем поля ввода */
-            input, textarea { font-size: 1rem; padding: 14px; }
-            .order-btn { padding: 16px; font-size: 1rem; }
-
-            /* Шапка на мобильных */
             header { flex-direction: column; text-align: center; padding: 15px; }
-            header img { height: 60px; }
-            header h1 { font-size: 1.6rem; }
-            header p { font-size: 0.8rem; }
+            header .logo h1 { font-size: 1.6rem; }
+            header .logo p { font-size: 0.8rem; }
+            .admin-toggle-wrap .admin-label { font-size: 0.75rem; padding: 4px 10px; }
         }
 
-        /* Для десктопа скрываем плавающую кнопку и оверлей */
         @media (min-width: 769px) {
             .cart-toggle-btn, .cart-overlay { display: none !important; }
             .cart { transform: none !important; position: sticky; top: 20px; max-height: 90vh; }
@@ -234,13 +482,36 @@
 </head>
 <body>
 
-    <!-- Шапка (можно убрать или оставить) -->
+    <!-- Шапка -->
     <header>
-        <div>
+        <div class="logo">
             <h1>ROSSI'S CLUB</h1>
             <p>Заказывайте прямо со стола</p>
         </div>
+        <!-- Скрытый переключатель админа (пароль защищён) -->
+        <div class="admin-toggle-wrap">
+            <label class="admin-label" id="adminToggleLabel">
+                <span class="lock-icon">🔒</span>
+                <span id="adminStatusText">Гость</span>
+                <input type="checkbox" id="adminCheckbox">
+                <span>Админ</span>
+            </label>
+        </div>
     </header>
+
+    <!-- Модалка ввода пароля -->
+    <div class="password-modal" id="passwordModal">
+        <div class="modal-content">
+            <h3>🔐 Вход в режим администратора</h3>
+            <p style="color:#7f6b5c; font-size:0.9rem;">Введите пароль для доступа</p>
+            <input type="password" id="passwordInput" placeholder="••••••" maxlength="10">
+            <div class="error-msg" id="passwordError"></div>
+            <div class="btn-row">
+                <button class="btn-cancel" id="passwordCancel">Отмена</button>
+                <button class="btn-confirm" id="passwordConfirm">Войти</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Затемнение для корзины (мобильные) -->
     <div class="cart-overlay" id="cartOverlay"></div>
@@ -253,7 +524,7 @@
         <!-- Меню -->
         <div class="menu" id="menu"></div>
 
-        <!-- Корзина (десктоп и мобильная выезжающая) -->
+        <!-- Корзина -->
         <div class="cart" id="cartPanel">
             <h2>Корзина <button class="clear-cart" id="clearCartBtn">Очистить</button></h2>
             <div id="cartItems" class="cart-items"></div>
@@ -263,9 +534,21 @@
             <textarea id="userComment" rows="2" placeholder="Пожелания (необязательно)"></textarea>
             <button class="order-btn" id="orderBtn">✅ Оформить заказ</button>
         </div>
+
+        <!-- Панель заказов -->
+        <div class="all-orders" id="allOrdersPanel">
+            <h2>
+                📋 Заказы
+                <span class="badge" id="ordersCount">0</span>
+            </h2>
+            <div id="ordersList"></div>
+        </div>
     </div>
 
     <script>
+        // ===== ПАРОЛЬ ДЛЯ АДМИНА (МОЖНО ИЗМЕНИТЬ) =====
+        const ADMIN_PASSWORD = '8569'; // ← СМЕНИТЕ НА СВОЙ ПАРОЛЬ
+
         // ===== МЕНЮ =====
         const products = [
         { id: 1, name: "Цезарь с курицей", price: 450, category: "Кухня", subcategory: "Салаты" },
@@ -353,24 +636,56 @@
         { id: 83, name: "Василеостровское светлое", price: 400, category: "Бар", subcategory: "Разливное пиво" },
         { id: 84, name: "Сидр Яблоко", price: 300, category: "Бар", subcategory: "Бутылочное пиво" },
         { id: 86, name: "Карбонара", price: 460, category: "Кухня", subcategory: "Паста" },
-        
         ];
 
-
         let cart = {};
+        let allOrders = [];
+        let isAdmin = false;
         const categoryOrder = ['Кухня', 'Бар'];
 
-        // Сохранение и загрузка
-        function save() { localStorage.setItem('cart', JSON.stringify(cart)); }
+        // ===== ФУНКЦИИ ДЛЯ РАБОТЫ С ЗАКАЗАМИ =====
+        function getCurrentUser() {
+            const name = document.getElementById('userName').value.trim() || 'Гость';
+            const table = document.getElementById('userTable').value.trim() || '0';
+            return { name, table };
+        }
+
+        function getFilteredOrders() {
+            if (isAdmin) return allOrders;
+            const user = getCurrentUser();
+            return allOrders.filter(o => 
+                o.name === user.name && o.table === user.table
+            );
+        }
+
+        // ===== СОХРАНЕНИЕ =====
+        function save() { 
+            localStorage.setItem('cart', JSON.stringify(cart)); 
+            localStorage.setItem('allOrders', JSON.stringify(allOrders)); 
+            localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+        }
         function load() {
             let saved = localStorage.getItem('cart');
             if (saved) { try { cart = JSON.parse(saved); } catch(e) { cart = {}; } }
             else cart = {};
+            
+            let savedOrders = localStorage.getItem('allOrders');
+            if (savedOrders) { try { allOrders = JSON.parse(savedOrders); } catch(e) { allOrders = []; } }
+            else allOrders = [];
+            
+            const savedAdmin = localStorage.getItem('isAdmin');
+            if (savedAdmin === 'true') {
+                isAdmin = true;
+                document.getElementById('adminCheckbox').checked = true;
+                updateAdminUI();
+            }
+            
             renderCart();
             updateBadge();
+            renderAllOrders();
         }
 
-        // Добавление / удаление
+        // ===== КОРЗИНА =====
         function addToCart(id) {
             cart[id] = (cart[id] || 0) + 1;
             save();
@@ -394,7 +709,6 @@
             updateBadge();
         }
 
-        // Рендер корзины
         function renderCart() {
             const container = document.getElementById('cartItems');
             const totalSpan = document.getElementById('cartTotal');
@@ -427,7 +741,97 @@
             totalSpan.innerText = total;
         }
 
-        // Рендер меню с категориями и подкатегориями (спойлеры)
+        // ===== ВСЕ ЗАКАЗЫ (с фильтром) =====
+        function renderAllOrders() {
+            const container = document.getElementById('ordersList');
+            const countSpan = document.getElementById('ordersCount');
+            const filtered = getFilteredOrders();
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-orders">Пока нет заказов</div>';
+                countSpan.textContent = '0';
+                return;
+            }
+
+            let html = '';
+            if (isAdmin) {
+                html += '<div class="admin-only">👑 Режим администратора — видны все заказы</div>';
+            }
+
+            let grandTotal = 0;
+            filtered.forEach((order, index) => {
+                const realIndex = allOrders.indexOf(order);
+                let orderTotal = 0;
+                let itemsHtml = '';
+                order.items.forEach(item => {
+                    const price = Number(item.price) || 0;
+                    const qty = Number(item.qty) || 1;
+                    const sum = price * qty;
+                    orderTotal += sum;
+                    itemsHtml += `
+                        <div class="order-item">
+                            <span>${item.name} x${qty}</span>
+                            <span>${sum}₽</span>
+                        </div>
+                    `;
+                });
+                grandTotal += orderTotal;
+
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            Стол №${order.table}
+                            <small>${order.name || 'Гость'}</small>
+                        </div>
+                        ${itemsHtml}
+                        <div class="order-total">Итого: ${orderTotal}₽</div>
+                        ${isAdmin ? `
+                        <div class="order-actions">
+                            <button class="btn-del" onclick="deleteOrder(${realIndex})">✕ Удалить</button>
+                            <button class="btn-dup" onclick="duplicateOrder(${realIndex})">📋 Дублировать</button>
+                        </div>` : ''}
+                    </div>
+                `;
+            });
+
+            if (isAdmin && filtered.length > 1) {
+                html += `
+                    <div class="grand-total">
+                        💰 Общая сумма всех заказов: ${grandTotal}₽
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+            countSpan.textContent = filtered.length;
+        }
+
+        // ===== УПРАВЛЕНИЕ ЗАКАЗАМИ (только для админа) =====
+        function deleteOrder(index) {
+            if (!isAdmin) return;
+            if (confirm(`Удалить заказ стола №${allOrders[index].table}?`)) {
+                allOrders.splice(index, 1);
+                save();
+                renderAllOrders();
+                showToast('🗑️ Заказ удалён');
+            }
+        }
+
+        function duplicateOrder(index) {
+            if (!isAdmin) return;
+            const original = allOrders[index];
+            const newOrder = {
+                table: original.table,
+                name: original.name || 'Гость',
+                items: original.items.map(item => ({ ...item }))
+            };
+            allOrders.push(newOrder);
+            save();
+            renderAllOrders();
+            showToast('📋 Заказ продублирован');
+        }
+
+        // ===== РЕНДЕР МЕНЮ =====
         function renderMenu() {
             const menuDiv = document.getElementById('menu');
             menuDiv.innerHTML = '';
@@ -442,6 +846,7 @@
             categoryOrder.forEach(catName => {
                 if (!categories[catName]) return;
                 const catHeader = document.createElement('h2');
+                catHeader.className = 'cat-title';
                 catHeader.textContent = catName === 'Кухня' ? '🍽️ Кухня' : '🍸 Бар';
                 catHeader.style.gridColumn = '1 / -1';
                 menuDiv.appendChild(catHeader);
@@ -453,6 +858,7 @@
                     wrapper.style.width = '100%';
 
                     const subHeader = document.createElement('h3');
+                    subHeader.className = 'sub-title';
                     subHeader.textContent = subName;
                     const arrow = document.createElement('span');
                     arrow.textContent = '▼';
@@ -473,17 +879,15 @@
                         itemsContainer.appendChild(card);
                     });
 
-                    // Спойлер: по клику сворачиваем/разворачиваем
                     subHeader.addEventListener('click', function() {
                         const isHidden = itemsContainer.style.display === 'none';
                         itemsContainer.style.display = isHidden ? 'grid' : 'none';
                         arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
                     });
 
-                    // На мобильных скрываем по умолчанию
                     if (window.innerWidth <= 768) {
-                    itemsContainer.style.display = 'none';
-                    arrow.style.transform = 'rotate(-90deg)';
+                        itemsContainer.style.display = 'none';
+                        arrow.style.transform = 'rotate(-90deg)';
                     }
 
                     wrapper.appendChild(subHeader);
@@ -493,7 +897,7 @@
             });
         }
 
-        // Бейдж на плавающей кнопке
+        // ===== БЕЙДЖ =====
         function updateBadge() {
             const badge = document.getElementById('cartBadge');
             const total = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
@@ -501,7 +905,7 @@
             badge.style.display = total > 0 ? 'block' : 'none';
         }
 
-        // Тост-уведомление
+        // ===== ТОСТ =====
         function showToast(msg) {
             const old = document.querySelector('.toast');
             if (old) old.remove();
@@ -523,58 +927,66 @@
             }, 2000);
         }
 
-        // Оформление заказа 
-      function placeOrder() {
-    const name = document.getElementById('userName').value.trim();
-    const table = document.getElementById('userTable').value.trim();
-    const comment = document.getElementById('userComment').value.trim();
+        // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
+        function placeOrder() {
+            const name = document.getElementById('userName').value.trim();
+            const table = document.getElementById('userTable').value.trim();
+            const comment = document.getElementById('userComment').value.trim();
 
-    if (!name || !table) {
-        alert('Заполните имя и номер стола');
-        return;
-    }
-    if (Object.keys(cart).length === 0) {
-        alert('Корзина пуста');
-        return;
-    }
+            if (!name || !table) {
+                alert('Заполните имя и номер стола');
+                return;
+            }
+            if (Object.keys(cart).length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
 
-    // Формируем текст заказа
-    let items = [], total = 0;
-    for (let id in cart) {
-        const p = products.find(x => x.id == id);
-        if (p) {
-            items.push(`${p.name} x${cart[id]} = ${p.price * cart[id]}₽`);
-            total += p.price * cart[id];
+            let items = [], total = 0;
+            let orderItems = [];
+            for (let id in cart) {
+                const p = products.find(x => x.id == id);
+                if (p) {
+                    const qty = cart[id];
+                    const sum = p.price * qty;
+                    items.push(`${p.name} x${qty} = ${sum}₽`);
+                    total += sum;
+                    orderItems.push({ name: p.name, price: p.price, qty: qty });
+                }
+            }
+
+            const newOrder = {
+                table: table,
+                name: name,
+                items: orderItems,
+                comment: comment || '—',
+                timestamp: new Date().toLocaleString()
+            };
+            allOrders.push(newOrder);
+
+            cart = {};
+            save();
+            renderCart();
+            updateBadge();
+            renderAllOrders();
+            document.getElementById('userComment').value = '';
+
+            const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8JvuYERMg-QzauWsJsFZanKwoJaZCQNUlgBpfrStFmdCOveIDbP1Z9mP2XRW8G4Zo/exec';
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: orderText,
+                    subject: 'Новый заказ из ресторана!'
+                })
+            }).catch(() => {});
+
+            alert('✅ Заказ отправлен!');
         }
-    }
-    const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${items.join('\n')}\n\nИТОГО: ${total} ₽`;
 
-    // ----- ОТПРАВКА НА GOOGLE APPS SCRIPT -----
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbw8JvuYERMg-QzauWsJsFZanKwoJaZCQNUlgBpfrStFmdCOveIDbP1Z9mP2XRW8G4Zo/exec'; // ЗАМЕНИТЕ
-
-    fetch(scriptUrl, {
-        method: 'POST',
-        mode: 'no-cors', // обходит CORS
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: orderText,
-            subject: 'Новый заказ из ресторана!'
-        })
-    })
-    .catch(() => {
-        // Ошибка не критична – запрос всё равно уходит
-    });
-
-    // Очищаем корзину и форму
-    cart = {};
-    save();
-    renderCart();
-    updateBadge();
-    document.getElementById('userComment').value = '';
-
-    alert('✅ Заказ отправлен!.');
-}
-        // Управление выезжающей корзиной
+        // ===== УПРАВЛЕНИЕ КОРЗИНОЙ (мобильная) =====
         const cartPanel = document.getElementById('cartPanel');
         const overlay = document.getElementById('cartOverlay');
         const toggleBtn = document.getElementById('cartToggleBtn');
@@ -585,32 +997,104 @@
         toggleBtn.addEventListener('click', toggleCart);
         overlay.addEventListener('click', closeCart);
 
-        // Закрывать корзину при клике вне, но оставим overlay
+        // ===== УПРАВЛЕНИЕ РЕЖИМОМ АДМИНА С ПАРОЛЕМ =====
+        const adminCheckbox = document.getElementById('adminCheckbox');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordError = document.getElementById('passwordError');
+        const adminStatusText = document.getElementById('adminStatusText');
 
-        // Инициализация
+        function updateAdminUI() {
+            if (isAdmin) {
+                adminCheckbox.checked = true;
+                adminStatusText.textContent = 'Админ';
+                document.querySelector('.admin-toggle-wrap .lock-icon').textContent = '👑';
+            } else {
+                adminCheckbox.checked = false;
+                adminStatusText.textContent = 'Гость';
+                document.querySelector('.admin-toggle-wrap .lock-icon').textContent = '🔒';
+            }
+            renderAllOrders();
+        }
+
+        // При клике на чекбокс — показываем модалку
+        adminCheckbox.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isAdmin) {
+                // Если админ уже включён — выключаем без пароля
+                isAdmin = false;
+                save();
+                updateAdminUI();
+                showToast('👤 Режим гостя');
+            } else {
+                // Включаем админ — просим пароль
+                passwordModal.classList.add('active');
+                passwordInput.value = '';
+                passwordError.textContent = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Подтверждение пароля
+        document.getElementById('passwordConfirm').addEventListener('click', function() {
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                isAdmin = true;
+                save();
+                updateAdminUI();
+                passwordModal.classList.remove('active');
+                showToast('👑 Режим администратора включён');
+            } else {
+                passwordError.textContent = '❌ Неверный пароль';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Отмена
+        document.getElementById('passwordCancel').addEventListener('click', function() {
+            passwordModal.classList.remove('active');
+            passwordError.textContent = '';
+            adminCheckbox.checked = false;
+        });
+
+        // Закрытие по клику вне модалки
+        passwordModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                passwordModal.classList.remove('active');
+                passwordError.textContent = '';
+                adminCheckbox.checked = false;
+            }
+        });
+
+        // Enter в поле пароля
+        passwordInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('passwordConfirm').click();
+            }
+        });
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
         window.addEventListener('load', function() {
             renderMenu();
             load();
             document.getElementById('clearCartBtn').addEventListener('click', clearCart);
             document.getElementById('orderBtn').addEventListener('click', placeOrder);
-            // Если десктоп – корзина всегда открыта
+            
+            document.getElementById('userName').addEventListener('input', renderAllOrders);
+            document.getElementById('userTable').addEventListener('input', renderAllOrders);
+
             if (window.innerWidth > 768) {
                 cartPanel.classList.add('open');
             }
         });
 
-        // При изменении размера окна (переход с мобилы на десктоп)
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 cartPanel.classList.add('open');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
-            } else {
-                // Если корзина была открыта на десктопе, она останется open, но это нормально
-                // Принудительно не закрываем, чтобы не мешать
             }
         });
     </script>
 </body>
 </html>
-Обновление меню
