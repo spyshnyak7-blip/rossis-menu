@@ -907,6 +907,26 @@
         .toast.show {
             opacity: 1;
         }
+        .waiter-enter-hint {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: #856404;
+            text-align: center;
+            display: none;
+        }
+        .waiter-enter-hint.show {
+            display: block;
+        }
+        .order-card .order-comment {
+            font-size: 0.75rem;
+            color: #7f6b5c;
+            margin-top: 4px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -973,6 +993,7 @@
                             <span class="new-badge" id="newOrdersBadge" style="display:none;">🆕 0</span>
                         </span>
                     </h2>
+                    <div class="waiter-enter-hint" id="waiterHint">👋 Чтобы увидеть заказы, включите режим официанта</div>
                     <div id="ordersList"></div>
                 </div>
             </div>
@@ -1117,9 +1138,7 @@
         let cart = {};
         let allOrders = [];
         let isWaiter = false;
-        let viewedOrders = new Set();
         let orderIdCounter = 0;
-        let editingOrderId = null;
 
         // ============================================================
         // 4. ЗАГРУЗКА / СОХРАНЕНИЕ
@@ -1129,7 +1148,6 @@
                 localStorage.setItem('resto_cart', JSON.stringify(cart));
                 localStorage.setItem('resto_orders', JSON.stringify(allOrders));
                 localStorage.setItem('resto_counter', String(orderIdCounter));
-                localStorage.setItem('resto_viewed', JSON.stringify([...viewedOrders]));
             } catch (e) {}
         }
 
@@ -1137,16 +1155,15 @@
             try {
                 const savedCart = localStorage.getItem('resto_cart');
                 if (savedCart) cart = JSON.parse(savedCart);
+
                 const savedOrders = localStorage.getItem('resto_orders');
                 if (savedOrders) allOrders = JSON.parse(savedOrders);
+
                 const savedCounter = localStorage.getItem('resto_counter');
                 if (savedCounter) orderIdCounter = parseInt(savedCounter) || 0;
-                const savedViewed = localStorage.getItem('resto_viewed');
-                if (savedViewed) viewedOrders = new Set(JSON.parse(savedViewed));
             } catch (e) {
                 cart = {};
                 allOrders = [];
-                viewedOrders = new Set();
             }
         }
 
@@ -1256,7 +1273,7 @@
         }
 
         // ============================================================
-        // 7. ОФОРМЛЕНИЕ ЗАКАЗА
+        // 7. ОФОРМЛЕНИЕ ЗАКАЗА (с группировкой по столу!)
         // ============================================================
         function placeOrder() {
             const name = document.getElementById('userName').value.trim() ||
@@ -1275,6 +1292,7 @@
                 return;
             }
 
+            // Собираем товары из корзины
             const orderItems = [];
             let total = 0;
             for (let id in cart) {
@@ -1286,15 +1304,24 @@
                 }
             }
 
-            const existing = allOrders.find(o => String(o.table) === String(table));
+            // Ищем существующий заказ на этот стол
+            const existingOrder = allOrders.find(o => String(o.table) === String(table));
 
-            if (existing) {
-                existing.items.push(...orderItems);
-                existing.name = name;
-                if (comment) existing.comment = comment;
-                if (existing.status === 'ready') existing.status = 'working';
+            if (existingOrder) {
+                // ===== ГРУППИРУЕМ: добавляем к существующему заказу =====
+                orderItems.forEach(newItem => {
+                    const existingItem = existingOrder.items.find(i => i.name === newItem.name);
+                    if (existingItem) {
+                        existingItem.qty += newItem.qty;
+                    } else {
+                        existingOrder.items.push(newItem);
+                    }
+                });
+                if (comment) existingOrder.comment = comment;
+                if (existingOrder.status === 'ready') existingOrder.status = 'working';
                 showToast('✅ Блюда добавлены к столу №' + table);
             } else {
+                // ===== НОВЫЙ ЗАКАЗ =====
                 const newOrder = {
                     id: ++orderIdCounter,
                     table: parseInt(table),
@@ -1308,6 +1335,7 @@
                 showToast('✅ Новый заказ для стола №' + table);
             }
 
+            // Очищаем корзину и сохраняем
             cart = {};
             saveData();
             renderCart();
@@ -1315,18 +1343,34 @@
             renderAllOrders();
             updateNewOrdersBadge();
 
+            // Очищаем комментарий
             document.getElementById('userComment').value = '';
             document.getElementById('userCommentMobile').value = '';
+
+            // Показываем уведомление
+            if (isWaiter) {
+                renderAllOrders();
+            }
         }
 
         // ============================================================
-        // 8. ОТОБРАЖЕНИЕ ЗАКАЗОВ
+        // 8. ОТОБРАЖЕНИЕ ЗАКАЗОВ ДЛЯ ОФИЦИАНТА
         // ============================================================
         function renderAllOrders() {
             const container = document.getElementById('ordersList');
             const countSpan = document.getElementById('ordersCount');
 
             if (!container) return;
+
+            // Показываем подсказку если официант не вошёл
+            const hint = document.getElementById('waiterHint');
+            if (!isWaiter) {
+                if (hint) hint.classList.add('show');
+                container.innerHTML = '';
+                if (countSpan) countSpan.textContent = '0';
+                return;
+            }
+            if (hint) hint.classList.remove('show');
 
             if (allOrders.length === 0) {
                 container.innerHTML = '<div class="order-empty">Пока нет заказов</div>';
@@ -1337,18 +1381,13 @@
             let html = '';
             let grandTotal = 0;
 
-            const sorted = [...allOrders].sort((a, b) => {
-                const aNew = a.status === 'new' && !viewedOrders.has(a.id);
-                const bNew = b.status === 'new' && !viewedOrders.has(b.id);
-                if (aNew && !bNew) return -1;
-                if (!aNew && bNew) return 1;
-                return a.table - b.table;
-            });
+            // Сортируем по номеру стола
+            const sorted = [...allOrders].sort((a, b) => a.table - b.table);
 
             sorted.forEach((order) => {
-                const isNew = order.status === 'new' && !viewedOrders.has(order.id);
                 let orderTotal = 0;
 
+                // Объединяем одинаковые позиции в заказе
                 const merged = {};
                 order.items.forEach(item => {
                     const key = item.name;
@@ -1366,14 +1405,7 @@
                     itemsHtml += `
                                 <div class="order-item">
                                     <span>${item.name} x${item.qty}</span>
-                                    <span style="display:flex; align-items:center; gap:6px;">
-                                        <span>${sum}₽</span>
-                                        <span class="item-controls">
-                                            <button class="btn-inc" onclick="editOrderItem(${order.id}, '${item.name}', 1)" title="+1">➕</button>
-                                            <button class="btn-dec" onclick="editOrderItem(${order.id}, '${item.name}', -1)" title="−1">➖</button>
-                                            <button class="btn-remove" onclick="editOrderItem(${order.id}, '${item.name}', 0)" title="Удалить">✕</button>
-                                        </span>
-                                    </span>
+                                    <span>${sum}₽</span>
                                 </div>
                             `;
                 });
@@ -1392,6 +1424,9 @@
                     'ready': `<button class="btn-status" onclick="changeStatus(${order.id}, 'new')">🔄 Вернуть</button>`
                 };
 
+                // Проверяем новый заказ (статус new и не просмотрен)
+                const isNew = order.status === 'new';
+
                 html += `
                             <div class="order-card ${isNew ? 'new-order' : ''}">
                                 <div class="order-header">
@@ -1402,11 +1437,11 @@
                                     <small>${order.name || 'Гость'} · ${order.items.length} позиций</small>
                                 </div>
                                 <div class="order-items">${itemsHtml}</div>
+                                ${order.comment && order.comment !== '—' ? `<div class="order-comment">📝 ${order.comment}</div>` : ''}
                                 <div class="order-total">💳 Итого: ${orderTotal}₽</div>
                                 <div class="order-status-row">
                                     ${statusLabels[order.status] || statusLabels.new}
                                     ${statusButtons[order.status] || ''}
-                                    <button class="btn-edit" onclick="openAddItemModal(${order.id})">➕ Добавить блюдо</button>
                                     <button class="btn-dup" onclick="duplicateOrder(${order.id})">📋 Дубль</button>
                                     <button class="btn-del" onclick="deleteOrder(${order.id})">✕</button>
                                 </div>
@@ -1428,139 +1463,7 @@
         }
 
         // ============================================================
-        // 9. РЕДАКТИРОВАНИЕ ЗАКАЗА
-        // ============================================================
-        function editOrderItem(orderId, itemName, delta) {
-            const idx = allOrders.findIndex(o => o.id === orderId);
-            if (idx === -1) return;
-
-            const order = allOrders[idx];
-            const itemIndex = order.items.findIndex(i => i.name === itemName);
-            if (itemIndex === -1) return;
-
-            if (delta === 0) {
-                order.items.splice(itemIndex, 1);
-                showToast(`🗑️ "${itemName}" удалён из заказа`);
-            } else {
-                order.items[itemIndex].qty += delta;
-                if (order.items[itemIndex].qty <= 0) {
-                    order.items.splice(itemIndex, 1);
-                    showToast(`🗑️ "${itemName}" удалён из заказа`);
-                } else {
-                    showToast(`🔄 "${itemName}" теперь ${order.items[itemIndex].qty} шт.`);
-                }
-            }
-
-            if (order.items.length === 0) {
-                allOrders.splice(idx, 1);
-                showToast('🗑️ Заказ удалён (пуст)');
-            }
-
-            if (order.status === 'new') {
-                order.status = 'working';
-                viewedOrders.add(orderId);
-            }
-
-            saveData();
-            renderAllOrders();
-            updateNewOrdersBadge();
-        }
-
-        // ============================================================
-        // 10. ДОБАВЛЕНИЕ БЛЮДА В ЗАКАЗ
-        // ============================================================
-        function openAddItemModal(orderId) {
-            editingOrderId = orderId;
-            const modal = document.getElementById('addItemModal');
-            modal.classList.add('active');
-            document.getElementById('searchProduct').value = '';
-            renderProductList('');
-        }
-
-        function closeAddItemModal() {
-            document.getElementById('addItemModal').classList.remove('active');
-            editingOrderId = null;
-        }
-
-        function renderProductList(search) {
-            const container = document.getElementById('productList');
-            const searchTerm = search.toLowerCase().trim();
-
-            let filtered = products;
-            if (searchTerm) {
-                filtered = products.filter(p =>
-                    p.name.toLowerCase().includes(searchTerm) ||
-                    p.category.toLowerCase().includes(searchTerm) ||
-                    p.subcategory.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            if (filtered.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:#7f6b5c;padding:20px;">Ничего не найдено</p>';
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(p => {
-                html += `
-                            <div class="product-item">
-                                <div class="info">
-                                    <div class="name">${p.name}</div>
-                                    <div class="price">${p.price}₽ · ${p.subcategory}</div>
-                                </div>
-                                <button onclick="addItemToOrder(${p.id})">+ Добавить</button>
-                            </div>
-                        `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function addItemToOrder(productId) {
-            if (editingOrderId === null) return;
-
-            const idx = allOrders.findIndex(o => o.id === editingOrderId);
-            if (idx === -1) return;
-
-            const p = products.find(x => x.id === productId);
-            if (!p) return;
-
-            const order = allOrders[idx];
-
-            const existing = order.items.find(i => i.name === p.name);
-            if (existing) {
-                existing.qty += 1;
-                showToast(`✅ "${p.name}" добавлен (теперь ${existing.qty} шт.)`);
-            } else {
-                order.items.push({ name: p.name, price: p.price, qty: 1 });
-                showToast(`✅ "${p.name}" добавлен в заказ`);
-            }
-
-            if (order.status === 'new') {
-                order.status = 'working';
-                viewedOrders.add(editingOrderId);
-            }
-
-            saveData();
-            renderAllOrders();
-            updateNewOrdersBadge();
-            closeAddItemModal();
-        }
-
-        document.getElementById('searchProduct').addEventListener('input', function() {
-            renderProductList(this.value);
-        });
-
-        document.getElementById('closeAddModal').addEventListener('click', closeAddItemModal);
-
-        document.getElementById('addItemModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAddItemModal();
-            }
-        });
-
-        // ============================================================
-        // 11. УПРАВЛЕНИЕ ЗАКАЗАМИ
+        // 9. УПРАВЛЕНИЕ ЗАКАЗАМИ
         // ============================================================
         function findOrderIndex(id) {
             return allOrders.findIndex(o => o.id === id);
@@ -1571,11 +1474,6 @@
             if (idx === -1) return;
             const order = allOrders[idx];
             order.status = newStatus;
-
-            if (newStatus === 'working' || newStatus === 'ready') {
-                viewedOrders.add(id);
-            }
-
             saveData();
             renderAllOrders();
             showToast(`Статус стола №${order.table}: ${newStatus}`);
@@ -1613,15 +1511,13 @@
         }
 
         // ============================================================
-        // 12. БЕЙДЖ НОВЫХ ЗАКАЗОВ
+        // 10. БЕЙДЖ НОВЫХ ЗАКАЗОВ
         // ============================================================
         function updateNewOrdersBadge() {
             const badge = document.getElementById('newOrdersBadge');
             if (!badge) return;
 
-            const newCount = allOrders.filter(o =>
-                o.status === 'new' && !viewedOrders.has(o.id)
-            ).length;
+            const newCount = allOrders.filter(o => o.status === 'new').length;
 
             if (newCount > 0 && isWaiter) {
                 badge.style.display = 'inline-block';
@@ -1632,7 +1528,7 @@
         }
 
         // ============================================================
-        // 13. РЕНДЕР МЕНЮ
+        // 11. РЕНДЕР МЕНЮ
         // ============================================================
         function renderMenu() {
             const grid = document.getElementById('menuGrid');
@@ -1702,7 +1598,7 @@
         }
 
         // ============================================================
-        // 14. РЕЖИМ ОФИЦИАНТА
+        // 12. РЕЖИМ ОФИЦИАНТА
         // ============================================================
         function setWaiterMode(enabled) {
             isWaiter = enabled;
@@ -1716,21 +1612,16 @@
             if (label) label.textContent = enabled ? 'Официант' : 'Гость';
             if (lockIcon) lockIcon.textContent = enabled ? '👑' : '🔒';
 
-            if (enabled) {
-                allOrders.forEach(o => {
-                    if (o.status === 'new') viewedOrders.add(o.id);
-                });
-                saveData();
-                renderAllOrders();
-                updateNewOrdersBadge();
-            }
-
             localStorage.setItem('resto_waiter', enabled ? 'true' : 'false');
             closeMobileCart();
+
+            // Обновляем заказы
+            renderAllOrders();
+            updateNewOrdersBadge();
         }
 
         // ============================================================
-        // 15. МОБИЛЬНАЯ КОРЗИНА
+        // 13. МОБИЛЬНАЯ КОРЗИНА
         // ============================================================
         let isCartOpen = false;
 
@@ -1757,7 +1648,7 @@
         }
 
         // ============================================================
-        // 16. АВТООБНОВЛЕНИЕ
+        // 14. АВТООБНОВЛЕНИЕ
         // ============================================================
         let autoRefreshTimer = null;
 
@@ -1765,20 +1656,17 @@
             if (autoRefreshTimer) clearInterval(autoRefreshTimer);
             autoRefreshTimer = setInterval(() => {
                 if (isWaiter) {
-                    const newOrders = allOrders.filter(o =>
-                        o.status === 'new' && !viewedOrders.has(o.id)
-                    );
+                    const newOrders = allOrders.filter(o => o.status === 'new');
                     if (newOrders.length > 0) {
                         renderAllOrders();
                         updateNewOrdersBadge();
-                        showToast('🆕 Новый заказ!');
                     }
                 }
             }, 5000);
         }
 
         // ============================================================
-        // 17. ИНИЦИАЛИЗАЦИЯ
+        // 15. ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         function init() {
             loadData();
@@ -1789,9 +1677,10 @@
             const savedWaiter = localStorage.getItem('resto_waiter');
             if (savedWaiter === 'true') {
                 setWaiterMode(true);
+            } else {
+                renderAllOrders();
             }
 
-            renderAllOrders();
             updateNewOrdersBadge();
             startAutoRefresh();
 
@@ -1817,6 +1706,7 @@
                     document.getElementById('passwordModal').classList.remove('active');
                     setWaiterMode(true);
                     showToast('👑 Режим официанта включён');
+                    renderAllOrders();
                 } else {
                     error.textContent = '❌ Неверный пароль';
                     input.value = '';
@@ -1882,6 +1772,8 @@
             console.log('📋 Всего позиций в меню:', products.length);
             console.log('📋 Заказов в системе:', allOrders.length);
             console.log('🔑 Пароль официанта:', WAITER_PASSWORD);
+            console.log('✅ Группировка заказов по столам включена!');
+            console.log('👑 Чтобы увидеть заказы, включите режим официанта');
         }
 
         document.addEventListener('DOMContentLoaded', init);
