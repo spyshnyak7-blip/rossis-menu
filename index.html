@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Меню ресторана</title>
+    <title>Меню ресторана ROSSI'S CLUB</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background: #0a0a0a;
@@ -18,13 +17,10 @@
             padding: 15px;
             color: #2c241a;
         }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
         }
-
-        /* ===== ШАПКА ===== */
         header {
             display: flex;
             align-items: center;
@@ -37,19 +33,16 @@
             flex-wrap: wrap;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
-
         header .logo h1 {
             font-size: 2rem;
             color: #c25b2e;
             margin: 0;
         }
-
         header .logo p {
             color: #7f6b5c;
             font-size: 0.85rem;
             margin: 0;
         }
-
         .role-toggle {
             display: flex;
             align-items: center;
@@ -64,11 +57,9 @@
             border: 1px solid #e0d5cb;
             user-select: none;
         }
-
         .role-toggle:hover {
             background: #ede5dd;
         }
-
         .role-toggle input[type="checkbox"] {
             width: 40px;
             height: 22px;
@@ -80,7 +71,6 @@
             transition: 0.3s;
             flex-shrink: 0;
         }
-
         .role-toggle input[type="checkbox"]::after {
             content: '';
             position: absolute;
@@ -93,38 +83,30 @@
             transition: 0.3s;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
-
         .role-toggle input[type="checkbox"]:checked {
             background: #c25b2e;
         }
-
         .role-toggle input[type="checkbox"]:checked::after {
             left: 20px;
         }
-
         .role-toggle .lock-icon {
             font-size: 0.8rem;
         }
-
-        /* ===== ОСНОВНАЯ СЕТКА ===== */
         .main-grid {
             display: flex;
             gap: 30px;
             flex-wrap: wrap;
+            width: 100%;
         }
-
-        /* ===== МЕНЮ ===== */
         .menu-section {
             flex: 2;
             min-width: 300px;
         }
-
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
         }
-
         .menu-card {
             background: white;
             border-radius: 16px;
@@ -135,32 +117,21 @@
             display: flex;
             flex-direction: column;
         }
-
         .menu-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-
         .menu-card .name {
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 4px;
         }
-
         .menu-card .price {
             color: #c25b2e;
             font-weight: 700;
             font-size: 1.2rem;
             margin: 6px 0 10px;
         }
-
-        .menu-card .desc {
-            font-size: 0.8rem;
-            color: #7f6b5c;
-            margin-bottom: 10px;
-            flex: 1;
-        }
-
         .menu-card button {
             background: #c25b2e;
             color: white;
@@ -173,12 +144,10 @@
             width: 100%;
             font-size: 0.9rem;
         }
-
         .menu-card button:hover {
             background: #a34721;
             transform: scale(0.97);
         }
-
         .category-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -188,7 +157,6 @@
             margin: 25px 0 15px;
             grid-column: 1 / -1;
         }
-
         .subcategory-title {
             font-size: 1rem;
             font-weight: 600;
@@ -201,33 +169,26 @@
             align-items: center;
             grid-column: 1 / -1;
         }
-
         .subcategory-items {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             grid-column: 1 / -1;
         }
-
         .subcategory-items.hidden {
             display: none;
         }
-
         .arrow {
             transition: transform 0.3s;
         }
-
         .arrow.rotated {
             transform: rotate(-90deg);
         }
-
-        /* ===== КОРЗИНА ===== */
         .cart-section {
             flex: 1;
             min-width: 280px;
             max-width: 400px;
         }
-
         .cart-panel {
             background: white;
             border-radius: 24px;
@@ -239,7 +200,6 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-
         .cart-panel h2 {
             display: flex;
             justify-content: space-between;
@@ -249,14 +209,12 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #f0e0d4;
         }
-
         .cart-empty {
             text-align: center;
             color: #b87a5a;
             padding: 30px 0;
             font-size: 0.95rem;
         }
-
         .cart-item {
             display: flex;
             justify-content: space-between;
@@ -266,23 +224,19 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-
         .cart-item .info {
             flex: 2;
             min-width: 80px;
             font-size: 0.9rem;
         }
-
         .cart-item .info .item-name {
             font-weight: 500;
         }
-
         .cart-item .controls {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
         .cart-item .controls button {
             background: #f0dbce;
             color: #a34721;
@@ -295,24 +249,20 @@
             cursor: pointer;
             transition: 0.2s;
         }
-
         .cart-item .controls button:hover {
             background: #e0cbbb;
         }
-
         .cart-item .qty {
             min-width: 20px;
             text-align: center;
             font-weight: 600;
         }
-
         .cart-item .item-total {
             font-weight: 600;
             min-width: 60px;
             text-align: right;
             font-size: 0.9rem;
         }
-
         .cart-total {
             font-size: 1.3rem;
             font-weight: 700;
@@ -321,7 +271,6 @@
             padding-top: 14px;
             margin: 10px 0 16px;
         }
-
         .cart-panel input,
         .cart-panel textarea {
             width: 100%;
@@ -333,19 +282,16 @@
             margin-bottom: 8px;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         .cart-panel textarea {
             border-radius: 16px;
             resize: vertical;
             min-height: 50px;
         }
-
         .cart-panel input:focus,
         .cart-panel textarea:focus {
             border-color: #c25b2e;
             outline: none;
         }
-
         .btn-order {
             width: 100%;
             background: #2f6b47;
@@ -359,11 +305,9 @@
             transition: 0.2s;
             margin-top: 6px;
         }
-
         .btn-order:hover {
             background: #1f5538;
         }
-
         .btn-clear {
             background: #b0a088;
             color: white;
@@ -375,12 +319,9 @@
             font-weight: 500;
             transition: 0.2s;
         }
-
         .btn-clear:hover {
             background: #9a8a78;
         }
-
-        /* ===== ПАНЕЛЬ ЗАКАЗОВ (ОФИЦИАНТ) ===== */
         .orders-panel {
             flex: 1.5;
             min-width: 320px;
@@ -392,7 +333,6 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-
         .orders-panel h2 {
             display: flex;
             justify-content: space-between;
@@ -402,7 +342,6 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #f0e0d4;
         }
-
         .orders-panel .badge {
             background: #c25b2e20;
             color: #c25b2e;
@@ -411,7 +350,6 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-
         .new-badge {
             background: #d32f2f;
             color: white;
@@ -421,13 +359,17 @@
             font-weight: 700;
             animation: pulse-badge 1.5s ease-in-out 3;
         }
-
         @keyframes pulse-badge {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
-
         .order-card {
             background: #fcf8f5;
             border-radius: 16px;
@@ -436,17 +378,14 @@
             border-left: 4px solid #c25b2e;
             transition: 0.2s;
         }
-
         .order-card.new-order {
             border-left-color: #d32f2f;
             background: #fff5f5;
             animation: pulse-card 1.5s ease-in-out 3;
         }
-
         .order-card.new-order .new-label {
             display: inline-block;
         }
-
         .new-label {
             display: none;
             background: #d32f2f;
@@ -459,13 +398,17 @@
             margin-left: 8px;
             vertical-align: middle;
         }
-
         @keyframes pulse-card {
-            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.2); }
-            70% { box-shadow: 0 0 0 8px rgba(211, 47, 47, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.2);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(211, 47, 47, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+            }
         }
-
         .order-card .order-header {
             display: flex;
             justify-content: space-between;
@@ -476,36 +419,67 @@
             flex-wrap: wrap;
             gap: 4px;
         }
-
         .order-card .order-header .table-info {
             display: flex;
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
         }
-
         .order-card .order-header small {
             font-weight: 400;
             color: #8f735b;
             font-size: 0.75rem;
         }
-
         .order-card .order-items {
             padding-left: 4px;
         }
-
         .order-card .order-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 4px 0;
             border-bottom: 1px dashed #eee6dd;
             font-size: 0.85rem;
+            gap: 6px;
         }
-
         .order-card .order-item:last-child {
             border-bottom: none;
         }
-
+        .order-card .order-item .item-controls {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .order-card .order-item .item-controls button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+        .order-card .order-item .item-controls .btn-inc {
+            background: #e8f0e8;
+            color: #2f6b47;
+        }
+        .order-card .order-item .item-controls .btn-inc:hover {
+            background: #d0e0d0;
+        }
+        .order-card .order-item .item-controls .btn-dec {
+            background: #f3e0d8;
+            color: #9a4f3a;
+        }
+        .order-card .order-item .item-controls .btn-dec:hover {
+            background: #eacbc0;
+        }
+        .order-card .order-item .item-controls .btn-remove {
+            background: #fce4e4;
+            color: #c62828;
+        }
+        .order-card .order-item .item-controls .btn-remove:hover {
+            background: #f5d0d0;
+        }
         .order-card .order-total {
             font-weight: 700;
             text-align: right;
@@ -514,7 +488,6 @@
             margin-top: 6px;
             font-size: 1rem;
         }
-
         .order-card .order-status-row {
             display: flex;
             gap: 6px;
@@ -522,7 +495,6 @@
             flex-wrap: wrap;
             align-items: center;
         }
-
         .status-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -530,22 +502,18 @@
             border-radius: 20px;
             margin-right: auto;
         }
-
         .status-label.new {
             background: #ffcdd2;
             color: #c62828;
         }
-
         .status-label.working {
             background: #fff3cd;
             color: #856404;
         }
-
         .status-label.ready {
             background: #c8e6c9;
             color: #2e7d32;
         }
-
         .order-card .order-status-row button {
             border: none;
             padding: 4px 14px;
@@ -556,42 +524,41 @@
             transition: 0.15s;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         .btn-status {
             background: #e8f0e8;
             color: #2f6b47;
         }
-
         .btn-status:hover {
             background: #d0e0d0;
         }
-
+        .btn-edit {
+            background: #e3d5c8;
+            color: #5c3c26;
+        }
+        .btn-edit:hover {
+            background: #d5c5b8;
+        }
         .btn-del {
             background: #f3e0d8;
             color: #9a4f3a;
         }
-
         .btn-del:hover {
             background: #eacbc0;
         }
-
         .btn-dup {
             background: transparent;
             border: 1px solid #d6c4b6;
             color: #5c3c26;
         }
-
         .btn-dup:hover {
             background: #f0e4da;
         }
-
         .order-empty {
             text-align: center;
             color: #aa8b6e;
             padding: 40px 0;
             font-size: 0.95rem;
         }
-
         .grand-total {
             background: #f2e8df;
             border-radius: 16px;
@@ -601,29 +568,22 @@
             font-weight: 700;
             font-size: 1.05rem;
         }
-
-        /* ===== Скрытие секций по ролям ===== */
         .guest-section {
             display: flex;
             gap: 30px;
             flex-wrap: wrap;
             width: 100%;
         }
-
         .waiter-section {
             display: none;
             width: 100%;
         }
-
         body.waiter-mode .guest-section {
             display: none;
         }
-
         body.waiter-mode .waiter-section {
             display: block;
         }
-
-        /* ===== МОДАЛКА ПАРОЛЯ ===== */
         .password-modal {
             display: none;
             position: fixed;
@@ -636,11 +596,9 @@
             justify-content: center;
             align-items: center;
         }
-
         .password-modal.active {
             display: flex;
         }
-
         .password-modal .modal-content {
             background: white;
             border-radius: 24px;
@@ -650,19 +608,16 @@
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-
         .password-modal .modal-content h3 {
             margin: 0 0 6px;
             color: #c25b2e;
             font-size: 1.4rem;
         }
-
         .password-modal .modal-content p {
             color: #7f6b5c;
             font-size: 0.9rem;
             margin-bottom: 16px;
         }
-
         .password-modal .modal-content input {
             width: 100%;
             padding: 14px;
@@ -674,18 +629,15 @@
             margin-bottom: 16px;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         .password-modal .modal-content input:focus {
             border-color: #c25b2e;
             outline: none;
         }
-
         .password-modal .modal-content .btn-row {
             display: flex;
             gap: 12px;
             justify-content: center;
         }
-
         .password-modal .modal-content .btn-row button {
             padding: 10px 30px;
             border: none;
@@ -696,33 +648,120 @@
             font-size: 1rem;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         .btn-confirm {
             background: #c25b2e;
             color: white;
         }
-
         .btn-confirm:hover {
             background: #a34721;
         }
-
         .btn-cancel {
             background: #e8e0d8;
             color: #5c3c26;
         }
-
         .btn-cancel:hover {
             background: #ddd2c8;
         }
-
         .password-error {
             color: #d32f2f;
             font-size: 0.85rem;
             min-height: 24px;
             margin-bottom: 8px;
         }
-
-        /* ===== ПЛАВАЮЩАЯ КНОПКА КОРЗИНЫ (МОБИЛЬНАЯ) ===== */
+        .add-item-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .add-item-modal.active {
+            display: flex;
+        }
+        .add-item-modal .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .add-item-modal .modal-content h3 {
+            margin: 0 0 16px;
+            color: #c25b2e;
+            border-bottom: 2px solid #f0e0d4;
+            padding-bottom: 10px;
+        }
+        .add-item-modal .modal-content .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0ece8;
+        }
+        .add-item-modal .modal-content .product-item:last-child {
+            border-bottom: none;
+        }
+        .add-item-modal .modal-content .product-item .info {
+            flex: 1;
+        }
+        .add-item-modal .modal-content .product-item .info .name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .add-item-modal .modal-content .product-item .info .price {
+            color: #c25b2e;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .add-item-modal .modal-content .product-item button {
+            background: #c25b2e;
+            color: white;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .add-item-modal .modal-content .product-item button:hover {
+            background: #a34721;
+        }
+        .add-item-modal .modal-content .close-modal {
+            width: 100%;
+            padding: 10px;
+            background: #e8e0d8;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.2s;
+        }
+        .add-item-modal .modal-content .close-modal:hover {
+            background: #ddd2c8;
+        }
+        .add-item-modal .modal-content .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 30px;
+            border: 1px solid #e0d5cb;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .add-item-modal .modal-content .search-input:focus {
+            border-color: #c25b2e;
+            outline: none;
+        }
         .cart-toggle-btn {
             display: none;
             position: fixed;
@@ -741,7 +780,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .cart-toggle-btn .cart-badge {
             position: absolute;
             top: -4px;
@@ -755,7 +793,6 @@
             min-width: 22px;
             text-align: center;
         }
-
         .cart-overlay {
             display: none;
             position: fixed;
@@ -766,11 +803,9 @@
             background: rgba(0, 0, 0, 0.4);
             z-index: 998;
         }
-
         .cart-overlay.active {
             display: block;
         }
-
         .cart-mobile {
             display: none;
             position: fixed;
@@ -787,81 +822,58 @@
             padding: 20px 18px 30px;
             overflow-y: auto;
         }
-
         .cart-mobile.open {
             transform: translateY(0);
         }
-
-        /* ===== АДАПТАЦИЯ ===== */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
-
             .main-grid {
                 flex-direction: column;
             }
-
             .cart-section {
                 max-width: 100%;
                 display: none;
             }
-
             .cart-mobile {
                 display: block;
             }
-
             .cart-toggle-btn {
                 display: flex;
             }
-
             .guest-section {
                 flex-direction: column;
             }
-
             .menu-grid {
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
                 gap: 10px;
             }
-
             .menu-card {
                 padding: 12px;
             }
-
             .menu-card .name {
                 font-size: 0.95rem;
             }
-
             .menu-card .price {
                 font-size: 1rem;
             }
-
             header {
                 flex-direction: column;
                 text-align: center;
                 padding: 12px 16px;
             }
-
             header .logo h1 {
                 font-size: 1.5rem;
             }
-
             .role-toggle {
                 font-size: 0.75rem;
                 padding: 4px 12px 4px 14px;
             }
-
             .orders-panel {
                 max-height: none;
             }
-
-            .cart-panel {
-                position: sticky;
-                top: 0;
-                max-height: none;
-            }
         }
-
         @media (min-width: 769px) {
             .cart-mobile {
                 display: none !important;
@@ -873,7 +885,6 @@
                 display: none !important;
             }
         }
-
         .toast {
             position: fixed;
             bottom: 90px;
@@ -893,7 +904,6 @@
             pointer-events: none;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         .toast.show {
             opacity: 1;
         }
@@ -970,6 +980,15 @@
         </div>
     </div>
 
+    <div class="add-item-modal" id="addItemModal">
+        <div class="modal-content">
+            <h3>➕ Добавить блюдо в заказ</h3>
+            <input type="text" class="search-input" id="searchProduct" placeholder="🔍 Поиск блюда...">
+            <div id="productList"></div>
+            <button class="close-modal" id="closeAddModal">Закрыть</button>
+        </div>
+    </div>
+
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-mobile" id="cartMobile">
         <h2 style="display:flex; justify-content:space-between; align-items:center; font-size:1.2rem; margin:0 0 12px; padding-bottom:10px; border-bottom:2px solid #f0e0d4;">
@@ -998,10 +1017,10 @@
         const WAITER_PASSWORD = '1234';
 
         // ============================================================
-        // 2. МЕНЮ (ВСЕ 86 ПОЗИЦИЙ)
+        // 2. МЕНЮ
         // ============================================================
         const products = [
-            { id: 1, name: "Цезарь с курицей", price: 450, category: "Кухня", subcategory: "Салаты" },
+             { id: 1, name: "Цезарь с курицей", price: 450, category: "Кухня", subcategory: "Салаты" },
             { id: 2, name: "Цезарь с креветками", price: 490, category: "Кухня", subcategory: "Салаты" },
             { id: 3, name: "Салат с теплыми баклажанами", price: 470, category: "Кухня", subcategory: "Салаты" },
             { id: 4, name: "Греческий салат", price: 400, category: "Кухня", subcategory: "Салаты" },
@@ -1100,6 +1119,7 @@
         let isWaiter = false;
         let viewedOrders = new Set();
         let orderIdCounter = 0;
+        let editingOrderId = null;
 
         // ============================================================
         // 4. ЗАГРУЗКА / СОХРАНЕНИЕ
@@ -1110,20 +1130,17 @@
                 localStorage.setItem('resto_orders', JSON.stringify(allOrders));
                 localStorage.setItem('resto_counter', String(orderIdCounter));
                 localStorage.setItem('resto_viewed', JSON.stringify([...viewedOrders]));
-            } catch (e) { /* ignore */ }
+            } catch (e) {}
         }
 
         function loadData() {
             try {
                 const savedCart = localStorage.getItem('resto_cart');
                 if (savedCart) cart = JSON.parse(savedCart);
-
                 const savedOrders = localStorage.getItem('resto_orders');
                 if (savedOrders) allOrders = JSON.parse(savedOrders);
-
                 const savedCounter = localStorage.getItem('resto_counter');
                 if (savedCounter) orderIdCounter = parseInt(savedCounter) || 0;
-
                 const savedViewed = localStorage.getItem('resto_viewed');
                 if (savedViewed) viewedOrders = new Set(JSON.parse(savedViewed));
             } catch (e) {
@@ -1134,7 +1151,7 @@
         }
 
         // ============================================================
-        // 5. ТОСТ-УВЕДОМЛЕНИЯ
+        // 5. TOAST
         // ============================================================
         let toastTimer = null;
 
@@ -1212,21 +1229,20 @@
                 const qty = cart[id];
                 const sum = p.price * qty;
                 html += `
-                        <div class="cart-item">
-                            <div class="info">
-                                <div class="item-name">${p.name}</div>
-                                <span style="font-size:0.75rem;color:#7f6b5c;">${p.price}₽</span>
+                            <div class="cart-item">
+                                <div class="info">
+                                    <div class="item-name">${p.name}</div>
+                                    <span style="font-size:0.75rem;color:#7f6b5c;">${p.price}₽</span>
+                                </div>
+                                <div class="controls">
+                                    <button onclick="removeFromCart(${id})">−</button>
+                                    <span class="qty">${qty}</span>
+                                    <button onclick="addToCart(${id})">+</button>
+                                </div>
+                                <div class="item-total">${sum}₽</div>
                             </div>
-                            <div class="controls">
-                                <button onclick="removeFromCart(${id})">−</button>
-                                <span class="qty">${qty}</span>
-                                <button onclick="addToCart(${id})">+</button>
-                            </div>
-                            <div class="item-total">${sum}₽</div>
-                        </div>
-                    `;
+                        `;
             }
-
             if (container) container.innerHTML = html;
             if (containerMob) containerMob.innerHTML = html;
         }
@@ -1260,10 +1276,13 @@
             }
 
             const orderItems = [];
+            let total = 0;
             for (let id in cart) {
                 const p = products.find(x => x.id == id);
                 if (p) {
-                    orderItems.push({ name: p.name, price: p.price, qty: cart[id] });
+                    const qty = cart[id];
+                    orderItems.push({ name: p.name, price: p.price, qty: qty });
+                    total += p.price * qty;
                 }
             }
 
@@ -1345,11 +1364,18 @@
                     const sum = item.price * item.qty;
                     orderTotal += sum;
                     itemsHtml += `
-                            <div class="order-item">
-                                <span>${item.name} x${item.qty}</span>
-                                <span>${sum}₽</span>
-                            </div>
-                        `;
+                                <div class="order-item">
+                                    <span>${item.name} x${item.qty}</span>
+                                    <span style="display:flex; align-items:center; gap:6px;">
+                                        <span>${sum}₽</span>
+                                        <span class="item-controls">
+                                            <button class="btn-inc" onclick="editOrderItem(${order.id}, '${item.name}', 1)" title="+1">➕</button>
+                                            <button class="btn-dec" onclick="editOrderItem(${order.id}, '${item.name}', -1)" title="−1">➖</button>
+                                            <button class="btn-remove" onclick="editOrderItem(${order.id}, '${item.name}', 0)" title="Удалить">✕</button>
+                                        </span>
+                                    </span>
+                                </div>
+                            `;
                 });
 
                 grandTotal += orderTotal;
@@ -1367,32 +1393,33 @@
                 };
 
                 html += `
-                        <div class="order-card ${isNew ? 'new-order' : ''}">
-                            <div class="order-header">
-                                <span class="table-info">
-                                    🪑 Стол №${order.table}
-                                    <span class="new-label">🆕 НОВЫЙ</span>
-                                </span>
-                                <small>${order.name || 'Гость'} · ${order.items.length} позиций</small>
+                            <div class="order-card ${isNew ? 'new-order' : ''}">
+                                <div class="order-header">
+                                    <span class="table-info">
+                                        🪑 Стол №${order.table}
+                                        <span class="new-label">🆕 НОВЫЙ</span>
+                                    </span>
+                                    <small>${order.name || 'Гость'} · ${order.items.length} позиций</small>
+                                </div>
+                                <div class="order-items">${itemsHtml}</div>
+                                <div class="order-total">💳 Итого: ${orderTotal}₽</div>
+                                <div class="order-status-row">
+                                    ${statusLabels[order.status] || statusLabels.new}
+                                    ${statusButtons[order.status] || ''}
+                                    <button class="btn-edit" onclick="openAddItemModal(${order.id})">➕ Добавить блюдо</button>
+                                    <button class="btn-dup" onclick="duplicateOrder(${order.id})">📋 Дубль</button>
+                                    <button class="btn-del" onclick="deleteOrder(${order.id})">✕</button>
+                                </div>
                             </div>
-                            <div class="order-items">${itemsHtml}</div>
-                            <div class="order-total">💳 Итого: ${orderTotal}₽</div>
-                            <div class="order-status-row">
-                                ${statusLabels[order.status] || statusLabels.new}
-                                ${statusButtons[order.status] || ''}
-                                <button class="btn-dup" onclick="duplicateOrder(${order.id})">📋 Дубль</button>
-                                <button class="btn-del" onclick="deleteOrder(${order.id})">✕</button>
-                            </div>
-                        </div>
-                    `;
+                        `;
             });
 
             if (allOrders.length > 1) {
                 html += `
-                        <div class="grand-total">
-                            💰 Общая сумма всех заказов: ${grandTotal}₽
-                        </div>
-                    `;
+                            <div class="grand-total">
+                                💰 Общая сумма всех заказов: ${grandTotal}₽
+                            </div>
+                        `;
             }
 
             container.innerHTML = html;
@@ -1401,7 +1428,139 @@
         }
 
         // ============================================================
-        // 9. УПРАВЛЕНИЕ ЗАКАЗАМИ
+        // 9. РЕДАКТИРОВАНИЕ ЗАКАЗА
+        // ============================================================
+        function editOrderItem(orderId, itemName, delta) {
+            const idx = allOrders.findIndex(o => o.id === orderId);
+            if (idx === -1) return;
+
+            const order = allOrders[idx];
+            const itemIndex = order.items.findIndex(i => i.name === itemName);
+            if (itemIndex === -1) return;
+
+            if (delta === 0) {
+                order.items.splice(itemIndex, 1);
+                showToast(`🗑️ "${itemName}" удалён из заказа`);
+            } else {
+                order.items[itemIndex].qty += delta;
+                if (order.items[itemIndex].qty <= 0) {
+                    order.items.splice(itemIndex, 1);
+                    showToast(`🗑️ "${itemName}" удалён из заказа`);
+                } else {
+                    showToast(`🔄 "${itemName}" теперь ${order.items[itemIndex].qty} шт.`);
+                }
+            }
+
+            if (order.items.length === 0) {
+                allOrders.splice(idx, 1);
+                showToast('🗑️ Заказ удалён (пуст)');
+            }
+
+            if (order.status === 'new') {
+                order.status = 'working';
+                viewedOrders.add(orderId);
+            }
+
+            saveData();
+            renderAllOrders();
+            updateNewOrdersBadge();
+        }
+
+        // ============================================================
+        // 10. ДОБАВЛЕНИЕ БЛЮДА В ЗАКАЗ
+        // ============================================================
+        function openAddItemModal(orderId) {
+            editingOrderId = orderId;
+            const modal = document.getElementById('addItemModal');
+            modal.classList.add('active');
+            document.getElementById('searchProduct').value = '';
+            renderProductList('');
+        }
+
+        function closeAddItemModal() {
+            document.getElementById('addItemModal').classList.remove('active');
+            editingOrderId = null;
+        }
+
+        function renderProductList(search) {
+            const container = document.getElementById('productList');
+            const searchTerm = search.toLowerCase().trim();
+
+            let filtered = products;
+            if (searchTerm) {
+                filtered = products.filter(p =>
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    p.category.toLowerCase().includes(searchTerm) ||
+                    p.subcategory.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#7f6b5c;padding:20px;">Ничего не найдено</p>';
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(p => {
+                html += `
+                            <div class="product-item">
+                                <div class="info">
+                                    <div class="name">${p.name}</div>
+                                    <div class="price">${p.price}₽ · ${p.subcategory}</div>
+                                </div>
+                                <button onclick="addItemToOrder(${p.id})">+ Добавить</button>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function addItemToOrder(productId) {
+            if (editingOrderId === null) return;
+
+            const idx = allOrders.findIndex(o => o.id === editingOrderId);
+            if (idx === -1) return;
+
+            const p = products.find(x => x.id === productId);
+            if (!p) return;
+
+            const order = allOrders[idx];
+
+            const existing = order.items.find(i => i.name === p.name);
+            if (existing) {
+                existing.qty += 1;
+                showToast(`✅ "${p.name}" добавлен (теперь ${existing.qty} шт.)`);
+            } else {
+                order.items.push({ name: p.name, price: p.price, qty: 1 });
+                showToast(`✅ "${p.name}" добавлен в заказ`);
+            }
+
+            if (order.status === 'new') {
+                order.status = 'working';
+                viewedOrders.add(editingOrderId);
+            }
+
+            saveData();
+            renderAllOrders();
+            updateNewOrdersBadge();
+            closeAddItemModal();
+        }
+
+        document.getElementById('searchProduct').addEventListener('input', function() {
+            renderProductList(this.value);
+        });
+
+        document.getElementById('closeAddModal').addEventListener('click', closeAddItemModal);
+
+        document.getElementById('addItemModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddItemModal();
+            }
+        });
+
+        // ============================================================
+        // 11. УПРАВЛЕНИЕ ЗАКАЗАМИ
         // ============================================================
         function findOrderIndex(id) {
             return allOrders.findIndex(o => o.id === id);
@@ -1454,7 +1613,7 @@
         }
 
         // ============================================================
-        // 10. БЕЙДЖ НОВЫХ ЗАКАЗОВ
+        // 12. БЕЙДЖ НОВЫХ ЗАКАЗОВ
         // ============================================================
         function updateNewOrdersBadge() {
             const badge = document.getElementById('newOrdersBadge');
@@ -1473,7 +1632,7 @@
         }
 
         // ============================================================
-        // 11. РЕНДЕР МЕНЮ
+        // 13. РЕНДЕР МЕНЮ
         // ============================================================
         function renderMenu() {
             const grid = document.getElementById('menuGrid');
@@ -1498,21 +1657,21 @@
                     const subId = 'sub_' + catName + '_' + subName.replace(/\s/g, '_');
 
                     html += `
-                            <div class="subcategory-title" data-target="${subId}">
-                                ${subName}
-                                <span class="arrow rotated">▼</span>
-                            </div>
-                            <div class="subcategory-items hidden" id="${subId}">
-                        `;
+                                <div class="subcategory-title" data-target="${subId}">
+                                    ${subName}
+                                    <span class="arrow rotated">▼</span>
+                                </div>
+                                <div class="subcategory-items hidden" id="${subId}">
+                            `;
 
                     subcats[subName].forEach(p => {
                         html += `
-                                <div class="menu-card">
-                                    <div class="name">${p.name}</div>
-                                    <div class="price">${p.price} ₽</div>
-                                    <button onclick="addToCart(${p.id})">В корзину</button>
-                                </div>
-                            `;
+                                    <div class="menu-card">
+                                        <div class="name">${p.name}</div>
+                                        <div class="price">${p.price} ₽</div>
+                                        <button onclick="addToCart(${p.id})">В корзину</button>
+                                    </div>
+                                `;
                     });
 
                     html += `</div>`;
@@ -1543,7 +1702,7 @@
         }
 
         // ============================================================
-        // 12. РЕЖИМ ОФИЦИАНТА
+        // 14. РЕЖИМ ОФИЦИАНТА
         // ============================================================
         function setWaiterMode(enabled) {
             isWaiter = enabled;
@@ -1571,7 +1730,7 @@
         }
 
         // ============================================================
-        // 13. МОБИЛЬНАЯ КОРЗИНА
+        // 15. МОБИЛЬНАЯ КОРЗИНА
         // ============================================================
         let isCartOpen = false;
 
@@ -1598,7 +1757,7 @@
         }
 
         // ============================================================
-        // 14. АВТООБНОВЛЕНИЕ
+        // 16. АВТООБНОВЛЕНИЕ
         // ============================================================
         let autoRefreshTimer = null;
 
@@ -1619,7 +1778,7 @@
         }
 
         // ============================================================
-        // 15. ИНИЦИАЛИЗАЦИЯ
+        // 17. ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         function init() {
             loadData();
@@ -1636,6 +1795,7 @@
             updateNewOrdersBadge();
             startAutoRefresh();
 
+            // Переключатель ролей
             document.getElementById('waiterCheckbox').addEventListener('click', function(e) {
                 e.preventDefault();
                 if (isWaiter) {
@@ -1649,6 +1809,7 @@
                 }
             });
 
+            // Пароль
             document.getElementById('passwordConfirm').addEventListener('click', function() {
                 const input = document.getElementById('passwordInput');
                 const error = document.getElementById('passwordError');
@@ -1685,6 +1846,7 @@
                 }
             });
 
+            // Корзина
             document.getElementById('clearCartBtn').addEventListener('click', clearCart);
             document.getElementById('clearCartBtnMobile').addEventListener('click', clearCart);
             document.getElementById('orderBtn').addEventListener('click', placeOrder);
@@ -1692,6 +1854,7 @@
             document.getElementById('cartToggleBtn').addEventListener('click', toggleMobileCart);
             document.getElementById('cartOverlay').addEventListener('click', closeMobileCart);
 
+            // Синхронизация полей
             const syncFields = ['userName', 'userTable', 'userComment'];
             syncFields.forEach(field => {
                 const desktop = document.getElementById(field);
