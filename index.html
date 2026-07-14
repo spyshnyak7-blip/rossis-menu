@@ -1310,7 +1310,19 @@
             })
             .then(() => console.log('✅ Заказ отправлен на почту'))
             .catch(() => console.log('❌ Ошибка отправки'));
-            // ============================================================
+             // ============================================================
+            
+             cart = {};
+            saveData();
+            renderCart();
+            updateCartBadge();
+            renderAllOrders();
+            updateNewOrdersBadge();
+
+            document.getElementById('userComment').value = '';
+            document.getElementById('userCommentMobile').value = '';
+        }
+          
             // Собираем товары из корзины
             const orderItems = [];
             let total = 0;
