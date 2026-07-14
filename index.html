@@ -1291,7 +1291,26 @@
                 showToast('⚠️ Корзина пуста');
                 return;
             }
+            // ============================================================
+            // 📧 ОТПРАВКА ЗАКАЗА НА ПОЧТУ (FormSubmit.co)
+            // ============================================================
+            const itemsText = orderItems.map(item => `${item.name} x${item.qty} = ${item.price * item.qty}₽`).join('\n');
+            const orderText = `🛎 НОВЫЙ ЗАКАЗ\nИмя: ${name}\nСтол №${table}\nКоммент: ${comment || '—'}\n\n${itemsText}\n\nИТОГО: ${total} ₽`;
 
+            fetch('https://formsubmit.co/ajax/pyshnyak.2000@mail.ru', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    _subject: '🆕 НОВЫЙ ЗАКАЗ!',
+                    message: orderText
+                })
+            })
+            .then(() => console.log('✅ Заказ отправлен на почту'))
+            .catch(() => console.log('❌ Ошибка отправки'));
+            // ============================================================
             // Собираем товары из корзины
             const orderItems = [];
             let total = 0;
