@@ -936,7 +936,8 @@
         <header>
             <div class="logo">
                 <h1>🍽️ ROSSI'S CLUB</h1>
-                <p>Заказывайте прямо со стола</p>
+                <p> </p>
+                
             </div>
             <div class="role-toggle" id="roleToggle">
                 <span class="lock-icon">🔒</span>
@@ -1042,15 +1043,15 @@
         // ============================================================
         const products = [
              { id: 1, name: "Цезарь с курицей", price: 450, category: "Кухня", subcategory: "Салаты" },
-            { id: 2, name: "Цезарь с креветками", price: 490, category: "Кухня", subcategory: "Салаты" },
+            { id: 2, name: "", price: , category: "", subcategory: "" },
             { id: 3, name: "Салат с теплыми баклажанами", price: 470, category: "Кухня", subcategory: "Салаты" },
             { id: 4, name: "Греческий салат", price: 400, category: "Кухня", subcategory: "Салаты" },
             { id: 5, name: "Гренки с сыром", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
             { id: 6, name: "Картофель фри", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
             { id: 7, name: "Картофель айдахо", price: 250, category: "Кухня", subcategory: "Горячие закуски" },
-            { id: 8, name: "Сырные палочки", price: 360, category: "Кухня", subcategory: "Горячие закуски" },
+            { id: 8, name: "", price: , category: "", subcategory: "" },
             { id: 9, name: "Куриные наггетсы", price: 390, category: "Кухня", subcategory: "Горячие закуски" },
-            { id: 10, name: "Креветки темпура", price: 700, category: "Кухня", subcategory: "Горячие закуски" },
+            { id: 10, name: "", price: , category: "", subcategory: "" },
             { id: 11, name: "Болоньезе", price: 510, category: "Кухня", subcategory: "Паста" },
             { id: 12, name: "Паста с курицей и грибами", price: 490, category: "Кухня", subcategory: "Паста" },
             { id: 13, name: "Карбонара", price: 460, category: "Кухня", subcategory: "Паста" },
@@ -1075,7 +1076,7 @@
             { id: 32, name: "Ноз Расинес Мерло", price: 650, category: "Бар", subcategory: "Красное вино" },
             { id: 33, name: "Richetta Sauer", price: 550, category: "Бар", subcategory: "Коктейли" },
             { id: 34, name: "Negroni", price: 660, category: "Бар", subcategory: "Коктейли" },
-            { id: 35, name: "Almond Negroni", price: 780, category: "Бар", subcategory: "Коктейли" },
+            { id: 35, name: "", price: , category: "", subcategory: "" },
             { id: 36, name: "Double Daiquiri", price: 550, category: "Бар", subcategory: "Коктейли" },
             { id: 37, name: "Cucumber Negroni", price: 750, category: "Бар", subcategory: "Коктейли" },
             { id: 38, name: "Whiskey Sour", price: 550, category: "Бар", subcategory: "Коктейли" },
@@ -1097,19 +1098,19 @@
             { id: 54, name: "Апероль Спритц", price: 650, category: "Бар", subcategory: "Миксы" },
             { id: 55, name: "Сарти Спритц", price: 600, category: "Бар", subcategory: "Миксы" },
             { id: 56, name: "Деласи Спритц", price: 550, category: "Бар", subcategory: "Миксы" },
-            { id: 57, name: "Кола", price: 250, category: "Бар", subcategory: "Напитки" },
-            { id: 58, name: "Ананас-личи", price: 260, category: "Бар", subcategory: "Напитки" },
+            { id: 57, name: "Спрайт", price: 250, category: "Бар", subcategory: "Напитки" },
+            { id: 58, name: "", price: , category: "", subcategory: "" },
             { id: 59, name: "Сок апельсин", price: 200, category: "Бар", subcategory: "Соки" },
             { id: 60, name: "Сок ананас", price: 200, category: "Бар", subcategory: "Соки" },
             { id: 61, name: "Сок вишня", price: 200, category: "Бар", subcategory: "Соки" },
-            { id: 60, name: "Торт Прага", price: 400, category: "Бар", subcategory: "Соки" },
+            { id: 60, name: "Торт Прага", price: 400, category: "Кухня", subcategory: "Десерты" },
             { id: 62, name: "Сок яблоко", price: 200, category: "Бар", subcategory: "Соки" },
             { id: 63, name: "Вода б/г", price: 160, category: "Бар", subcategory: "Вода" },
             { id: 64, name: "Вода с/г", price: 160, category: "Бар", subcategory: "Вода" },
-            { id: 65, name: "Алоэ-базилик", price: 280, category: "Бар", subcategory: "Безалкогольные" },
+            { id: 65, name: "Сенча-лимонный тарт", price: 280, category: "Бар", subcategory: "Безалкогольные" },
             { id: 66, name: "Сенча-юдзу", price: 280, category: "Бар", subcategory: "Безалкогольные" },
             { id: 67, name: "Манго-маракуйя", price: 280, category: "Бар", subcategory: "Безалкогольные" },
-            { id: 68, name: "Груша-карамель", price: 280, category: "Бар", subcategory: "Безалкогольные" },
+            { id: 68, name: "Киви-крыжовник", price: 280, category: "Бар", subcategory: "Безалкогольные" },
             { id: 69, name: "Ассам", price: 300, category: "Бар", subcategory: "Чай" },
             { id: 70, name: "Сенча", price: 460, category: "Бар", subcategory: "Чай" },
             { id: 71, name: "Эрл Грей", price: 300, category: "Бар", subcategory: "Чай" },
@@ -1123,13 +1124,21 @@
             { id: 79, name: "Молоко", price: 50, category: "Бар", subcategory: "Кофе" },
             { id: 80, name: "Сироп", price: 50, category: "Бар", subcategory: "Кофе" },
             { id: 81, name: "Василеостровское тёмное", price: 400, category: "Бар", subcategory: "Пиво" },
-            { id: 82, name: "Василеостровское пшеничное", price: 400, category: "Бар", subcategory: "Пиво" },
-            { id: 83, name: "крик", price: 400, category: "Бар", subcategory: "Пиво" },
+            { id: 82, name: "Ягодный", price: 650, category: "Бар", subcategory: "Чай Фруктовый" },
+            { id: 83, name: "Облепиховый", price: 650, category: "Бар", subcategory: "Чай фруктовый" },
             { id: 84, name: "Наполеон", price: 350, category: "Кухня", subcategory: "Десерты" },
             { id: 85, name: "Торт морковный", price: 360, category: "Кухня", subcategory: "Десерты" },
             { id: 86, name: "Тирамису", price: 450, category: "Кухня", subcategory: "Десерты" },
-            { id: 87, name: "Тарталетка Сникерс", price: 350, category: "Кухня", subcategory: "Десерты" },
-            { id: 88, name: "Тарталетка Дубайская", price: 350, category: "Кухня", subcategory: "Десерты" },
+            { id: 87, name: "Тропический", price: 650, category: "Бар", subcategory: "Чай фруктовый" },
+            { id: 88, name: "Марокканский", price: 650, category: "Бар", subcategory: "Чай" },
+            { id: 89, name: "Пьяная вишня", price: 690, category: "Бар", subcategory: "Фруктовые чаи" },
+            { id: 90, name: "Ананас-мята 0,4", price: 410, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 91, name: "Ананас-мята 1л", price: 750, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 92, name: "Малина-апельсин 0,4", price: 410, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 93, name: "Малина-апельсин 1л", price: 750, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 94, name: "Тропики 0,4", price: 410, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 95, name: "Тропики 1л", price: 750, category: "Бар", subcategory: "Холодные чаи" },
+            { id: 96, name: "Мята", price: 50, category: "Бар", subcategory: "Чай" },
         ];
 
         // ============================================================
